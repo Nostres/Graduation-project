@@ -2,7 +2,7 @@
 grails:
     profile: org.grails.profiles:react:2.0.3
     codegen:
-        defaultPackage: graduation
+        defaultPackage: Graduation-project
     spring:
         transactionManagement:
             proxies: false
