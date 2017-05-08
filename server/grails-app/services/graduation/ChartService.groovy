@@ -24,7 +24,7 @@ class ChartService {
         DayValue.findAll()
     }
 
-    def addDataFromStream(HttpServletRequest request) throws Exception {
+    def addDataFromStream(HttpServletRequest request) throws ServiceException {
         checkFileType(request)
         clearAllData()
         request.inputStream.splitEachLine(',') { fields ->

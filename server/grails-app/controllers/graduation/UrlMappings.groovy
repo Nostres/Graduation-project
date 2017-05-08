@@ -1,5 +1,7 @@
 package graduation
 
+import org.hibernate.service.spi.ServiceException
+
 class UrlMappings {
 
     static mappings = {
@@ -14,7 +16,7 @@ class UrlMappings {
         post "/upload"(controller: 'application', action: 'upload')
 
         "/"(controller: 'application', action:'index')
-        "500"(view: '/error')
+        "500"(controller: 'application', action: 'handleServiceException', exception: ServiceException)
         "404"(view: '/notFound')
     }
 }

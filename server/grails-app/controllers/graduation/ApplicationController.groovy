@@ -2,6 +2,7 @@ package graduation
 
 import grails.core.GrailsApplication
 import grails.plugins.*
+import org.hibernate.service.spi.ServiceException
 
 class ApplicationController implements PluginManagerAware {
 
@@ -27,8 +28,15 @@ class ApplicationController implements PluginManagerAware {
         [dayValues: chartService.getData()]
     }
 
-    def upload() {
+    def upload() throws ServiceException {
         chartService.addDataFromStream(request)
-        [dayValues: chartService.getData()]
+        def map = [dayValues: chartService.getData()]
+        render (view: 'getAll', model: map)
+    }
+
+    def handleServiceException(ServiceException e) {
+        def map = [message: e.message]
+        response.status = 500
+        render (view: 'serviceException', model: map)
     }
 }
