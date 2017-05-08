@@ -1,0 +1,11 @@
+import graduation.DayValue
+
+model {
+    List<DayValue> dayValues
+}
+
+json {
+    data dayValues.collect({
+        [it.date.time, it.value]
+    })
+}
