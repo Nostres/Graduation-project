@@ -27,11 +27,12 @@ class ChartService {
     def addDataFromStream(HttpServletRequest request) throws ServiceException {
         checkFileType(request)
         clearAllData()
+        String fileName = request.getHeader("name")
         request.inputStream.splitEachLine(',') { fields ->
             Long date = fields[0] as Long
             Double value = fields[1] as Double
-            DayValue newDayValue = new DayValue(date: new Date(date), value: value, temp: null)
-            newDayValue.save(flush: true, failOnError: true)
+            DayValue dayValue = new DayValue(date: new Date(date), value: value, degree: null, fileName: fileName)
+            dayValue.save(flush: true, failOnError: true)
         }
     }
 

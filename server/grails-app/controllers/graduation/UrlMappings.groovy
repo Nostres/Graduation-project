@@ -14,8 +14,9 @@ class UrlMappings {
         get "/clearAll"(controller: 'application', action: 'clearAll')
         post "/add"(controller: 'application', action: 'add')
         post "/upload"(controller: 'application', action: 'upload')
+        post "/doCalculations"(controller: 'math', action: 'doCalculations', parseRequest: true)
 
-        "/"(controller: 'application', action:'index')
+        "/"(controller: 'application', action: 'index')
         "500"(controller: 'application', action: 'handleServiceException', exception: ServiceException)
         "404"(view: '/notFound')
     }

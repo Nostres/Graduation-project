@@ -2,11 +2,16 @@ package graduation
 
 class DayValue {
 
+    String fileName
+
     Date date
     Double value
-    Double temp
+    Double degree
 
     static constraints = {
-        temp nullable: true
+        degree nullable: true
+        fileName nullable: false
+        date nullable: false
+        value nullable: true
     }
 }
