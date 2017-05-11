@@ -3,6 +3,7 @@ package graduation
 import graduation.models.Calculations
 
 class MathController {
+
     static responseFormats = ['json', 'xml']
     static allowedMethods = [doCalculations: 'POST']
 
