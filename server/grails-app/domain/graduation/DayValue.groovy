@@ -6,9 +6,10 @@ class DayValue {
     Double value
     Double temp
 
-    static belongsTo = [Data]
+    static belongsTo = [file: DataFile]
 
     static constraints = {
         temp nullable: true
+        file nullable: false
     }
 }
