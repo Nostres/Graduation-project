@@ -4,16 +4,8 @@ import AppNav from '../components/AppNav';
 import Message from '../components/Message';
 
 import { CLIENT_VERSION, REACT_VERSION } from '../config';
-import { insertObjectToStore, isObjectInStore } from '../redux/reducers/objects';
 
 class App extends Component {
-
-  componentDidMount() {
-    if (!isObjectInStore(this.props.state, 'router')) {
-      this.props.dispatchAction(insertObjectToStore('router', this.props.router))
-    }
-  }
-
   render() {
     return (
       <div>

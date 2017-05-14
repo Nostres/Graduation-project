@@ -1,13 +1,14 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 import grailsLogo from '../images/grails-cupsonly-logo-white.svg';
-
 import UserMenu from './UserMenu';
+
+import './appNav.css';
 
 export default class AppNav extends React.Component {
   render() {
     return (
-      <Navbar style={{backgroundColor: '#4D8618', backgroundImage: 'none', borderRadius: 0}}>
+      <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
             <i className="fa grails-icon">
@@ -17,15 +18,13 @@ export default class AppNav extends React.Component {
           </Navbar.Brand>
           <Navbar.Toggle/>
         </Navbar.Header>
-          <Nav pullRight>
-            {
-              this.props.loggedIn &&
-              <UserMenu
-                dispatchAction={this.props.dispatchAction}
-                files={this.props.files}
-              />
-            }
-          </Nav>
+        {
+          this.props.loggedIn &&
+          <UserMenu
+            dispatchAction={this.props.dispatchAction}
+            files={this.props.files}
+          />
+        }
       </Navbar>
     );
   }

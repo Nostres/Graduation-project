@@ -7,7 +7,7 @@ import {
   UPLOAD_FILE_FAIL
 } from '../reducers/files'
 import sendRequest from '../utils/SendRequest';
-import { getToken } from '../utils/TokenStorage';
+import { getToken } from '../utils/Storage';
 
 function loadList(token) {
   const options = {

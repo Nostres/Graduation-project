@@ -1,4 +1,4 @@
-import { select, call } from 'redux-saga/effects';
+import { select } from 'redux-saga/effects';
 
 
 export function* redirectToFiles (){
@@ -10,7 +10,9 @@ export function* redirectToFiles (){
 export function* redirectToLogin() {
   let state = yield select();
   const router = state.objects.get('router');
-  if(router) {
+  const { routing } = state;
+  let path = routing.locationBeforeTransitions.pathname;
+  if(path !== '/login') {
     router.push('/login');
   }
 }

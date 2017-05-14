@@ -1,7 +1,8 @@
 import React from 'react';
-import { MenuItem, NavDropdown, NavItem } from 'react-bootstrap';
+import { MenuItem, Nav, NavDropdown, NavItem } from 'react-bootstrap';
 import { uploadFile, getFiles } from '../redux/reducers/files';
 import { logout } from '../redux/reducers/user';
+import { Link } from 'react-router';
 
 export default class UserMenu extends React.Component {
 
@@ -32,8 +33,12 @@ export default class UserMenu extends React.Component {
   }
 
   render() {
+    console.log(this.props.router);
     return(
-      <div>
+      <Nav pullRight>
+        <NavItem eventKey={3}>
+          <Link to='/files'>Return to files list</Link>
+        </NavItem>
         <NavDropdown eventKey={1} title="Menu" id="menu-dropdown">
           <MenuItem eventKey={1.1} onClick={this.selectFile}>
             Upload file
@@ -47,7 +52,7 @@ export default class UserMenu extends React.Component {
           type="file"
           ref={input => this.inputElement = input}
         />
-      </div>
+      </Nav>
     )
   }
 

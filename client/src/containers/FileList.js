@@ -1,13 +1,14 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import './fileList.css';
 
 const TableRow = (num, rec) => (
   <tr key={num}>
     <td>{num + 1}</td>
-    <td>{rec.get('name')}</td>
+    <td><Link to={`files/${rec.get('id')}`}>{rec.get('name')}</Link></td>
     <td>{rec.get('description')}</td>
     <td>{new Date(rec.get('created')).toDateString()}</td>
     <td>{new Date(rec.get('updated')).toDateString()}</td>

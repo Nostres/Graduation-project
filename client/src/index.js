@@ -8,13 +8,14 @@ import App from './containers/App';
 import Workspace from './containers/Workspace';
 import FileList from './containers/FileList';
 import configureStore from './redux/createStore';
-
-import './css/App.css';
-import './css/grails.css';
-import './css/main.css';
+import { insertObjectToStore, isObjectInStore } from './redux/reducers/objects';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
+
+if (!isObjectInStore(store.getState(), 'router')) {
+  store.dispatch(insertObjectToStore('router', history))
+}
 
 ReactDOM.render(
   <Provider store={store} key="provider">
@@ -22,7 +23,7 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <Route path="/login" component={Login}/>
         <Route path="/files" component={FileList}/>
-        <Route path="/work" component={Workspace}/>
+        <Route path="/files/:id" component={Workspace}/>
       </Route>
     </Router>
   </Provider>,

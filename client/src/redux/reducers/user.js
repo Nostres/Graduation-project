@@ -12,6 +12,8 @@ export const LOGOUT_USER = 'user/LOGOUT_USER';
 export const LOGOUT_USER_SUCCESS = 'user/LOGOUT_USER_SUCCESS';
 export const LOGOUT_USER_FAIL = 'user/LOGOUT_USER_FAIL';
 
+export const RESTORE_USER = 'user/RESTORE_USER';
+
 const initialState = fromJS({ loggedIn: false });
 
 export default function reducer(state = initialState, action = {}) {
@@ -21,11 +23,12 @@ export default function reducer(state = initialState, action = {}) {
     case LOGIN_USER_FAIL:
       return state.delete('loggingIn');
     case LOGIN_USER_SUCCESS:
+    case RESTORE_USER:
       return state
         .set('access_token', action.payload.access_token)
         .set('roles', fromJS(action.payload.roles))
         .set('username', action.payload.username)
-        .set('loggedIn', true)
+        .set('loggedIn', action.payload.access_token && action.payload.roles && action.payload.username)
         .delete('loggingIn');
     case LOGOUT_USER:
       return state.set('logOuting', true);
@@ -50,7 +53,7 @@ export function login(username, password) {
 
 export function logout() {
   return {
-    type: LOGOUT_USER_SUCCESS
+    type: LOGOUT_USER
   }
 }
 
