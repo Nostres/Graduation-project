@@ -22,6 +22,13 @@ class FileController implements PluginManagerAware {
         [files: fileService.getFiles(user)]
     }
 
+    @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'DELETE')
+    def delete() {
+        Long id = request.JSON['id'] as Long
+        fileService.deleteFile(id)
+        render(view: 'successOperation', model: [message: 'File deleted successful!'])
+    }
+
     @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'POST')
     def upload() throws ServiceException {
         User user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null

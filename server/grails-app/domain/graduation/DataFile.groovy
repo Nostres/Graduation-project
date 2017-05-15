@@ -1,6 +1,6 @@
 package graduation
 
-class DataFile {
+class DataFile implements Serializable {
 
     Date create
     Date update

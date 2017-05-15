@@ -1,5 +1,8 @@
 import { fromJS } from 'immutable';
 
+export const LOAD_CHART_DATA = 'LOAD_CHART_DATA';
+
+
 const initialState = fromJS({
   data: []
 });

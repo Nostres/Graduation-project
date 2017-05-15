@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AppNav from '../components/AppNav';
-import Message from '../components/Message';
+import AppNav from '../../components/Navigation/AppNav';
+import Message from '../../components/MessageModal/Message';
+import GlobalSpinner from '../../components/Spinner/GlobalSpinner';
 
-import { CLIENT_VERSION, REACT_VERSION } from '../config';
+import { CLIENT_VERSION, REACT_VERSION } from '../../config';
 
 class App extends Component {
   render() {
@@ -14,7 +15,9 @@ class App extends Component {
           clientInfo={{CLIENT_VERSION, REACT_VERSION}}
           loggedIn={this.props.isLoggedIn}
           files={this.props.files}
+          router={this.props.router}
         />
+        <GlobalSpinner/>
         {this.props.children}
         <Message
           message={this.props.message.toJS()}
@@ -29,6 +32,7 @@ const mapStateToProps = (state) => {
   return {
     data: state.charts.get('data'),
     files: state.files.get('data'),
+    uploading: state.files.get('uploading'),
     isLoggedIn: state.user.get('loggedIn'),
     message: state.message,
     state: state

@@ -4,18 +4,13 @@ import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import Login from './components/Login/Login';
-import App from './containers/App';
-import Workspace from './containers/Workspace';
-import FileList from './containers/FileList';
+import App from './containers/Application/App';
+import Workspace from './containers/Workspace/Workspace';
+import FileList from './containers/FileList/FileList';
 import configureStore from './redux/createStore';
-import { insertObjectToStore, isObjectInStore } from './redux/reducers/objects';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
-
-if (!isObjectInStore(store.getState(), 'router')) {
-  store.dispatch(insertObjectToStore('router', history))
-}
 
 ReactDOM.render(
   <Provider store={store} key="provider">

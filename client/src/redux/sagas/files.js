@@ -2,10 +2,13 @@ import { put, call, select } from 'redux-saga/effects';
 import {
   GET_FILES_SUCCESS,
   GET_FILES_FAIL,
-  GET_FILES,
+  getFiles,
   UPLOAD_FILE_SUCCESS,
-  UPLOAD_FILE_FAIL
-} from '../reducers/files'
+  UPLOAD_FILE_FAIL,
+  DELETE_FILE_SUCCESS,
+  DELETE_FILE_FAIL,
+  GET_FILES
+} from '../reducers/files';
 import sendRequest from '../utils/SendRequest';
 import { getToken } from '../utils/Storage';
 
@@ -30,9 +33,21 @@ function upload(token, file) {
   return sendRequest('file/upload', options)
 }
 
+
+function deleteF(token, id) {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'X-Auth-Token': token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({id})
+  };
+  return sendRequest('file/delete', options)
+}
+
 export function* loadFileList() {
   try {
-    yield put({ type: GET_FILES });
     const state = yield select();
     const result = yield call(loadList, getToken(state));
     yield put({ type: GET_FILES_SUCCESS, payload: result });
@@ -47,7 +62,23 @@ export function* uploadFile(action) {
     const state = yield select();
     const result = yield call(upload, getToken(state), file);
     yield put({ type: UPLOAD_FILE_SUCCESS, payload: result });
+    yield put({ type: GET_FILES });
   } catch (e) {
     yield put({ type: UPLOAD_FILE_FAIL, e });
   }
+}
+
+export function* deleteFile (action) {
+  try {
+    const { id } = action;
+    const state = yield select();
+    yield call(deleteF, getToken(state), id);
+    yield put({ type: DELETE_FILE_SUCCESS, payload: id });
+  } catch (e) {
+    yield put({ type: DELETE_FILE_FAIL, e });
+  }
+}
+
+export function* loadFileListCall() {
+  yield put(getFiles())
 }

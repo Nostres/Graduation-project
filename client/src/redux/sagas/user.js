@@ -7,6 +7,9 @@ import {
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAIL
 } from '../reducers/user'
+import {
+  CLEAR_ALL
+} from '../reducers/files';
 import sendRequest from '../utils/SendRequest';
 import { storeData, deleteData } from '../utils/Storage';
 
@@ -31,7 +34,8 @@ export function* login(action) {
   try {
     const { username, password } = action;
     const result = yield call(loginUser, username, password);
-    storeData('token', result);
+    yield call(storeData, 'token', result);
+
     yield put({ type: LOGIN_USER_SUCCESS, payload: result });
   } catch (e) {
     yield put({ type: LOGIN_USER_FAIL, e });
@@ -48,10 +52,11 @@ export function* register(action) {
   }
 }
 
-export function* logout(action) {
+export function* logout() {
   try {
     deleteData('token');
     yield put({ type: LOGOUT_USER_SUCCESS });
+    yield put({ type: CLEAR_ALL });
   } catch (e) {
     yield put({ type: LOGOUT_USER_FAIL, e });
   }

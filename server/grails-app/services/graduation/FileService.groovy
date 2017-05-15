@@ -14,6 +14,15 @@ class FileService {
         DataFile.findAllByUser(user)
     }
 
+    void deleteFile(Long id) {
+        def dataFile = DataFile.get(id)
+        List<DayValue> values = DayValue.findAllByFile(dataFile)
+        values.each {
+            it.delete(flush: true, failOnError: true)
+        }
+        dataFile.delete(flush: true, failOnError: true)
+    }
+
     def addDataFromStream(User user, HttpServletRequest request) throws ServiceException {
         checkUser(user)
         checkFileType(request)

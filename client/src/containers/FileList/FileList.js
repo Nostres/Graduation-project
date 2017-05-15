@@ -3,12 +3,26 @@ import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import trash from './trash-icon.png';
 import './fileList.css';
 
-const TableRow = (num, rec) => (
+import { deleteFile } from '../../redux/reducers/files';
+
+const Trash = (props) => (
+  <span>
+    <span className="remove-button" onClick={props.onDeleteFile}>
+      <img src={trash} alt="Grails"/>
+    </span>
+  </span>
+);
+
+const TableRow = (num, rec, deleteFile) => (
   <tr key={num}>
     <td>{num + 1}</td>
-    <td><Link to={`files/${rec.get('id')}`}>{rec.get('name')}</Link></td>
+    <td>
+      <Link to={`files/${rec.get('id')}`}>{rec.get('name')}</Link>
+      <Trash onDeleteFile={() => deleteFile(rec.get('id'))}/>
+    </td>
     <td>{rec.get('description')}</td>
     <td>{new Date(rec.get('created')).toDateString()}</td>
     <td>{new Date(rec.get('updated')).toDateString()}</td>
@@ -16,19 +30,29 @@ const TableRow = (num, rec) => (
 );
 
 
-const transformFiles = (files) => {
+const transformFiles = (files, deleteFile) => {
   if (!files) {
     return null;
   }
   const result = [];
   files.forEach((item, i) => {
-    result.push(TableRow(i, item))
+    result.push(TableRow(i, item, deleteFile))
   });
   return result;
 };
 
 
 class FileList extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.deleteFile = this.deleteFile.bind(this);
+  }
+
+  deleteFile(id) {
+    this.props.dispatchAction(deleteFile(id))
+  }
+
   render() {
     return(
       <div className="filelist-table">
@@ -44,7 +68,7 @@ class FileList extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {transformFiles(this.props.files)}
+          {transformFiles(this.props.files, this.deleteFile)}
           </tbody>
         </Table>
       </div>

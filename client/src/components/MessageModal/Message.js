@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Alert } from 'react-bootstrap';
-import { closeModal } from '../redux/reducers/message';
+import { closeModal } from '../../redux/reducers/message';
 
 const messages = {
   'danger': 'Error!',

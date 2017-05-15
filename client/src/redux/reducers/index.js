@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import objects from './objects';
 import charts from './charts';
 import message from './message';
 import files from './files';
 import user from './user';
+import spinner from './spinner';
 
 const combinedReducers = combineReducers({
   routing: routerReducer,
@@ -12,7 +12,7 @@ const combinedReducers = combineReducers({
   files,
   charts,
   message,
-  objects
+  spinner
 });
 
 export default combinedReducers;
