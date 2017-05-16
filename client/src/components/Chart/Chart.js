@@ -2,8 +2,6 @@ import React from 'react';
 import ReactHighcharts from 'react-highcharts';
 
 const buildConfig = (data) => {
-  const data1 = data.map(i => [i[0], i[1]]);
-  const data2 = data.map(i => [i[0], i[2]]);
   return {
     chart: {
       zoomType: 'x'
@@ -12,7 +10,7 @@ const buildConfig = (data) => {
       selected: 1
     },
     title: {
-      text: "Ivan's Chart"
+      text: "Chart"
     },
     subtitle: {
       text: 'Diploma'
@@ -37,7 +35,7 @@ const buildConfig = (data) => {
       {
         name: 'Data 1 Spline',
         type: 'spline',
-        data: data1,
+        data: data,
         lineWidth: 1.5,
         marker: {
           radius: 2
@@ -47,19 +45,19 @@ const buildConfig = (data) => {
           valueDecimals: 2
         }
       },
-      {
-        name: 'Data 2',
-        // type: 'spline',
-        data: data2,
-        color: '#0000ff',
-        lineWidth: 4,
-        marker: {
-          radius: 7
-        },
-        tooltip: {
-          valueDecimals: 2
-        }
-      }
+      // {
+      //   name: 'Data 2',
+      //   // type: 'spline',
+      //   data: data2,
+      //   color: '#0000ff',
+      //   lineWidth: 4,
+      //   marker: {
+      //     radius: 7
+      //   },
+      //   tooltip: {
+      //     valueDecimals: 2
+      //   }
+      // }
 
     ]
   }

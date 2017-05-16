@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AppNav from '../components/AppNav';
-import Workspace from './Workspace';
-import Message from '../components/Message';
+import AppNav from '../../components/Navigation/AppNav';
+import Message from '../../components/MessageModal/Message';
+import GlobalSpinner from '../../components/Spinner/GlobalSpinner';
 
-import { CLIENT_VERSION, REACT_VERSION } from '../config';
+import { CLIENT_VERSION, REACT_VERSION } from '../../config';
 
 class App extends Component {
   render() {
@@ -13,11 +13,12 @@ class App extends Component {
         <AppNav
           dispatchAction={this.props.dispatchAction}
           clientInfo={{CLIENT_VERSION, REACT_VERSION}}
+          loggedIn={this.props.isLoggedIn}
+          files={this.props.files}
+          router={this.props.router}
         />
-        <Workspace
-          dispatchAction={this.props.dispatchAction}
-          chartData={this.props.data}
-        />
+        <GlobalSpinner/>
+        {this.props.children}
         <Message
           message={this.props.message.toJS()}
           dispatchAction={this.props.dispatchAction}
@@ -30,7 +31,11 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     data: state.charts.get('data'),
-    message: state.message
+    files: state.files.get('data'),
+    uploading: state.files.get('uploading'),
+    isLoggedIn: state.user.get('loggedIn'),
+    message: state.message,
+    state: state
   }
 };
 

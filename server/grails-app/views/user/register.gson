@@ -1,0 +1,10 @@
+import graduation.User
+
+model {
+    User user
+}
+
+json {
+    type 'OK'
+    message "User $user.username has been registered!"
+}

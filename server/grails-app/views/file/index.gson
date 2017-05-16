@@ -1,0 +1,17 @@
+import graduation.DataFile
+
+model {
+    List<DataFile> files
+}
+
+json {
+    data files.collect {
+        [
+            id: it.id,
+            name: it.name,
+            description: it.description,
+            created: it.create.time,
+            updated: it.update.time
+        ]
+    }
+}
