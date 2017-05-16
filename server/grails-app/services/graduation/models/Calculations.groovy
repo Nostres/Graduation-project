@@ -33,14 +33,6 @@ class Calculations implements Serializable, Validateable {
         this.goalList = goalList
     }
 
-    Boolean getIsCollateral() {
-        return isCollateral
-    }
-
-    void setIsCollateral(Boolean isCollateral) {
-        this.isCollateral = isCollateral
-    }
-
     Conversion getConversion() {
         return conversion
     }
