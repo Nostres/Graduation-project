@@ -15,7 +15,7 @@ class UrlMappings {
         post "/file"(controller: 'file', action: 'upload')
         get "/file"(controller: 'file', action: 'index')
         get "/file/$id"(controller: 'dayValue', action: 'index', parseRequest: true)
-        post "/doCalculations"(controller: 'math', action: 'doCalculations', parseRequest: true)
+        post "/math"(controller: 'math', action: 'doCalculations', parseRequest: true)
 
         "/"(controller: 'application', action:'index')
         "500"(controller: 'application', action: 'handleServiceException', exception: ServiceException)

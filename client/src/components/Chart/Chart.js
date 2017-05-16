@@ -31,35 +31,7 @@ const buildConfig = (data) => {
         enableMouseTracking: false
       }
     },
-    series: [
-      {
-        name: 'Data 1 Spline',
-        type: 'spline',
-        data: data,
-        lineWidth: 1.5,
-        marker: {
-          radius: 2
-        },
-        color: '#ff5050',
-        tooltip: {
-          valueDecimals: 2
-        }
-      },
-      // {
-      //   name: 'Data 2',
-      //   // type: 'spline',
-      //   data: data2,
-      //   color: '#0000ff',
-      //   lineWidth: 4,
-      //   marker: {
-      //     radius: 7
-      //   },
-      //   tooltip: {
-      //     valueDecimals: 2
-      //   }
-      // }
-
-    ]
+    series: data
   }
 };
 
@@ -67,9 +39,11 @@ const buildConfig = (data) => {
 
 export default class Chart extends React.Component {
   render() {
-    const { data } = this.props;
+    const { series } = this.props;
     return (
-      <ReactHighcharts config={buildConfig(data)} ref="chart"/>
+      <div className="chart-panel">
+        <ReactHighcharts config={buildConfig(series)} ref="chart"/>
+      </div>
     )
   }
 }

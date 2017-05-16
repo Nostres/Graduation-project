@@ -1,0 +1,10 @@
+.workspace {
+    margin-top: 64px;
+}
+
+.main-chart-panel {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #BBBBBB;
+    border-radius: 7px;
+}

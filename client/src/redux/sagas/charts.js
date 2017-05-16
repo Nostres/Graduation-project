@@ -1,5 +1,8 @@
 import { put, call, select } from 'redux-saga/effects';
-import { LOAD_CHART_SUCCESS, LOAD_CHART_DATA_FAIL } from '../reducers/charts';
+import {
+  LOAD_CHART_SUCCESS, LOAD_CHART_DATA_FAIL,
+  CALCULATE_SUCCESS, CALCULATE_FAIL
+} from '../reducers/charts';
 import sendRequest from '../utils/SendRequest';
 import { getToken } from '../utils/Storage';
 
@@ -13,8 +16,7 @@ function load(token, id) {
   return sendRequest(`file/${id}`, options)
 }
 
-
-export function* loadChart (action) {
+export function* loadChart(action) {
   try {
     const { id } = action;
     const state = yield select();
@@ -22,5 +24,42 @@ export function* loadChart (action) {
     yield put({ type: LOAD_CHART_SUCCESS, payload: { fileId: id, ...result }});
   } catch (e) {
     yield put({ type: LOAD_CHART_DATA_FAIL, e });
+  }
+}
+
+
+function sendCalc(token, object) {
+  const options = {
+    method: 'POST',
+    headers: {
+      'X-Auth-Token': token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(object)
+  };
+  return sendRequest(`math`, options)
+}
+
+
+function buildReqestJson(action, fileId) {
+  return {
+    calculations: {
+      fileId: fileId,
+      demands: action.demands,
+      goalList: ["value"],
+      conversion: action.conversion
+    }
+  }
+}
+
+export function* calculate(action) {
+  try {
+    const state = yield select();
+    const fileId = state.charts.get('active');
+    const obj = buildReqestJson(action, fileId);
+    const result = yield call(sendCalc, getToken(state), obj);
+    yield put({ type: CALCULATE_SUCCESS, payload: { result, fileId }});
+  } catch (e) {
+    yield put({ type: CALCULATE_FAIL, e });
   }
 }

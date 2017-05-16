@@ -4,6 +4,9 @@ export const LOAD_CHART_DATA = 'chart/LOAD_CHART_DATA';
 export const LOAD_CHART_SUCCESS = 'chart/LOAD_CHART_SUCCESS';
 export const LOAD_CHART_DATA_FAIL = 'chart/LOAD_CHART_DATA_FAIL';
 
+export const CALCULATE = 'chart/CALCULATE';
+export const CALCULATE_SUCCESS = 'chart/CALCULATE_SUCCESS';
+export const CALCULATE_FAIL = 'chart/CALCULATE_FAIL';
 
 const initialState = fromJS({
   data: {},
@@ -27,8 +30,21 @@ export default function reducer(state = initialState, action = {}) {
       return state
         .delete('loading')
         .set('isLoaded', false);
+    case CALCULATE:
+      return state.set('calculating', true);
+    case CALCULATE_SUCCESS:
+      return state.setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList));
+    case CALCULATE_FAIL:
+      return state.delete('calculating');
     default:
       return state;
   }
 }
 
+export function calculate(demands, conversion) {
+  return {
+    type: CALCULATE,
+    demands,
+    conversion
+  }
+}

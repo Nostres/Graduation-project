@@ -1,0 +1,24 @@
+.control-panel {
+    margin: 0 15% 0 15%;
+    border: 1px solid #BBBBCC;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.control-item {
+    display: inline-block;
+    margin: 0 20px 0 0;
+}
+
+.control-button {
+    display: inline-block;
+    position: relative;
+    top: 30px;
+}
+
+.control-item-input {
+    position: relative;
+    top: 32px;
+    display: inline-block;
+    margin: 0 20px 0 0;
+}
