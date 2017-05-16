@@ -4,17 +4,17 @@ import grails.validation.Validateable
 
 class Calculations implements Serializable, Validateable {
 
-    private String filename
+    private Long fileId
     private List<String> demands
     private List<String> goalList
     private Conversion conversion
 
-    String getFilename() {
-        return filename
+    Long getFileId() {
+        return fileId
     }
 
-    void setFilename(String filename) {
-        this.filename = filename
+    void setFileId(Long fileId) {
+        this.fileId = fileId
     }
 
     List<String> getDemands() {

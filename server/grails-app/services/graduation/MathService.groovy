@@ -11,7 +11,8 @@ class MathService {
     def pythonRunService
 
     Map<String, ?> calculate(Calculations calculations) {
-        List<DayValue> data = DayValue.findAllByFileName(calculations.getFilename())
+        DataFile dataFile = DataFile.get(calculations.getFileId())
+        List<DayValue> data = DayValue.findAllByFile(dataFile)
         Map<String, ?> response = [:]
         calculations.goalList.forEach({ it ->
             response.put(it + "List", calculationFlow(calculations, data*."get${it.capitalize()}"() as List))
@@ -32,5 +33,4 @@ class MathService {
                 demandsMap  : demandsMap
         ]
     }
-
 }

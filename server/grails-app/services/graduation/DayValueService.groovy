@@ -9,7 +9,7 @@ class DayValueService {
         is.splitEachLine(',') { fields ->
             Long date = fields[0] as Long
             Double value = fields[1] as Double
-            DayValue newDayValue = new DayValue(file: file, date: new Date(date), value: value, temp: null)
+            DayValue newDayValue = new DayValue(file: file, date: new Date(date), value: value, degree: null)
             newDayValue.save(flush: true, failOnError: true)
         }
     }

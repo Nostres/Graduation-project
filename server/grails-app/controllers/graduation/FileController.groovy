@@ -6,6 +6,7 @@ import grails.plugins.GrailsPluginManager
 import grails.plugins.PluginManagerAware
 import org.hibernate.service.spi.ServiceException
 
+@Secured(value = ['ROLE_USER', 'ROLE_ADMIN'])
 class FileController implements PluginManagerAware {
 
     GrailsApplication grailsApplication
@@ -15,20 +16,19 @@ class FileController implements PluginManagerAware {
     def springSecurityService
 
     static responseFormats = ['json', 'xml']
+    static allowedMethods = [index: 'GET', delete: 'DELETE', upload: 'POST']
 
-    @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'GET')
     def index() {
         User user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
         [files: fileService.getFiles(user)]
     }
 
-    @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'DELETE')
     def delete(Long id) {
         fileService.deleteFile(id)
         render(view: 'successOperation', model: [message: 'File deleted successful!'])
     }
 
-    @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'POST')
+
     def upload() throws ServiceException {
         User user = springSecurityService.isLoggedIn() ? springSecurityService.loadCurrentUser() : null
         fileService.addDataFromStream(user, request)

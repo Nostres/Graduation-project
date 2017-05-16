@@ -7,11 +7,12 @@ class PythonRunService {
 
     Map<String, List<Double>> execute(List<Double> sample) {
         List<List<Double>> result = []
+
         try {
             String s = null
             String[] callAndArgs = [
                     "python",
-                    "/home/iborsuk/Home-Project/Graduation-project/server/grails-app/python/script.py",
+                    "${System.getProperty('user.dir')}/grails-app/python/script.py",
                     sample
             ]
 
