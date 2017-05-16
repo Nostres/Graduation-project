@@ -10,6 +10,6 @@ class MathController {
     def mathService
 
     def doCalculations(Calculations calculations) {
-        respond(mathService.calculate(calculations))
+        respond mathService.calculate(calculations)
     }
 }
