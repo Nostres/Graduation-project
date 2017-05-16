@@ -4,9 +4,14 @@ class DayValue {
 
     Date date
     Double value
-    Double temp
+    Double degree
+
+    static belongsTo = [file: DataFile]
 
     static constraints = {
-        temp nullable: true
+        degree nullable: true
+        date nullable: false
+        value nullable: true
+        file nullable: false
     }
 }

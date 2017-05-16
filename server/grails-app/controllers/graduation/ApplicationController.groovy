@@ -2,33 +2,22 @@ package graduation
 
 import grails.core.GrailsApplication
 import grails.plugins.*
+import org.hibernate.service.spi.ServiceException
+import grails.plugin.springsecurity.annotation.Secured
 
 class ApplicationController implements PluginManagerAware {
 
     GrailsApplication grailsApplication
     GrailsPluginManager pluginManager
-    ChartService chartService
 
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
         [grailsApplication: grailsApplication, pluginManager: pluginManager]
     }
 
-    def clearAll() {
-        chartService.clearAllData()
-        respond([:], status: 200)
-    }
-
-    def add() {
-        chartService.addValue(request.JSON['value'] as Double)
-        respond([:], status: 200)
-    }
-
-    def getAll() {
-        [dayValues: chartService.getData()]
-    }
-
-    def upload() {
-        chartService.addDataFromStream(request)
-        [dayValues: chartService.getData()]
+    def handleServiceException(ServiceException e) {
+        def map = [message: e.message]
+        response.status = 500
+        render (view: 'serviceException', model: map)
     }
 }

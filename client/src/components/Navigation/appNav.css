@@ -1,0 +1,5 @@
+.grails-icon > img {
+    width: 48px;
+    height: 32px;
+    filter: invert(100%);
+}

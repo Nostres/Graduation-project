@@ -1,11 +1,18 @@
 import { combineReducers } from 'redux';
-
+import { routerReducer } from 'react-router-redux';
 import charts from './charts';
 import message from './message';
+import files from './files';
+import user from './user';
+import spinner from './spinner';
 
-const rootReducer = combineReducers({
+const combinedReducers = combineReducers({
+  routing: routerReducer,
+  user,
+  files,
   charts,
-  message
+  message,
+  spinner
 });
 
-export default rootReducer;
+export default combinedReducers;
