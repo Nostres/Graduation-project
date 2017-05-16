@@ -1,5 +1,6 @@
 package graduation
 
+import graduation.constants.ScriptConstants
 import graduation.models.Calculations
 import grails.transaction.Transactional
 
@@ -12,6 +13,9 @@ class MathService {
 
     Map<String, ?> calculate(Calculations calculations) {
         DataFile dataFile = DataFile.get(calculations.getFileId())
+        if (dataFile == null) {
+            throw new NullPointerException()
+        }
         List<DayValue> data = DayValue.findAllByFile(dataFile)
         Map<String, ?> response = [:]
         calculations.goalList.forEach({ it ->
@@ -25,12 +29,17 @@ class MathService {
             sample = reformationService.reformat(calculations.getConversion(), sample)
         }
         Map<String, Double> generalCoefficients = coefficientService.countGeneralCoefficient(sample)
-        Map<String, ?> demandsMap = pythonRunService.execute(sample)
-
+        Map<String, ?> demandsMap = [:]
+        calculations.demands.forEach({ it ->
+            String functionName = it.toLowerCase()
+            if (ScriptConstants.availableFunction.contains(functionName)) {
+                demandsMap.put(functionName, pythonRunService.execute(sample, functionName))
+            }
+        })
         return [
                 sample      : sample,
                 coefficients: generalCoefficients,
-                demandsMap  : demandsMap
+                demands     : demandsMap
         ]
     }
 }

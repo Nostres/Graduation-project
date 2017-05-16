@@ -5,14 +5,13 @@ import grails.transaction.Transactional
 @Transactional
 class PythonRunService {
 
-    Map<String, List<Double>> execute(List<Double> sample) {
-        List<List<Double>> result = []
-
+    def execute(List<Double> sample, String goal) {
+        List<Double> result = []
+        String s = null
         try {
-            String s = null
             String[] callAndArgs = [
                     "python",
-                    "${System.getProperty('user.dir')}/grails-app/python/script.py",
+                    "${System.getProperty('user.dir')}/grails-app/python/${goal}.py".toString(),
                     sample
             ]
 
@@ -21,7 +20,7 @@ class PythonRunService {
             BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()))
 
             while ((s = stdInput.readLine()) != null) {
-                result.add(s.substring(1, s.length() - 1).split(",").collect({ it as Double }))
+                result = s.substring(1, s.length() - 1).split(",").collect({ it as Double })
             }
             while ((s = stdError.readLine()) != null) {
                 System.out.println(s)
@@ -30,9 +29,6 @@ class PythonRunService {
             System.out.println("exception occured")
             e.printStackTrace()
         }
-        return [
-                ACF : result.get(0),
-                PACF: result.get(1)
-        ]
+        return result
     }
 }
