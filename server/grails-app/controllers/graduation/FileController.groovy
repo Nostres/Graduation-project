@@ -23,8 +23,7 @@ class FileController implements PluginManagerAware {
     }
 
     @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'], httpMethod = 'DELETE')
-    def delete() {
-        Long id = request.JSON['id'] as Long
+    def delete(Long id) {
         fileService.deleteFile(id)
         render(view: 'successOperation', model: [message: 'File deleted successful!'])
     }

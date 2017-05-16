@@ -10,12 +10,11 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-//        get "/api/getAll"(controller: 'file', action: 'getAll')
-//        get "/api/clearAll"(controller: 'file', action: 'clearAll')
-//        post "/api/add"(controller: 'file', action: 'add')
-//        post "/api/upload"(controller: 'file', action: 'upload')
-//
-//        post "/api/register"(controller: "user", action: "register")
+
+        delete "/file/$id"(controller: 'file', parseRequest: true, action: 'delete')
+        post "/file"(controller: 'file', action: 'upload')
+        get "/file"(controller: 'file', action: 'index')
+        get "/file/$id"(controller: 'dayValue', action: 'index', parseRequest: true)
 
         "/"(controller: 'application', action:'index')
         "500"(controller: 'application', action: 'handleServiceException', exception: ServiceException)

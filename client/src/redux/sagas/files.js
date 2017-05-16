@@ -30,7 +30,7 @@ function upload(token, file) {
       name: file.name
     }
   };
-  return sendRequest('file/upload', options)
+  return sendRequest('file', options)
 }
 
 
@@ -39,11 +39,9 @@ function deleteF(token, id) {
     method: 'DELETE',
     headers: {
       'X-Auth-Token': token,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({id})
+    }
   };
-  return sendRequest('file/delete', options)
+  return sendRequest(`file/${id}`, options)
 }
 
 export function* loadFileList() {

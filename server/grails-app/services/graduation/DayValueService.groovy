@@ -13,4 +13,9 @@ class DayValueService {
             newDayValue.save(flush: true, failOnError: true)
         }
     }
+
+    def getAll(Long id) {
+        DataFile file = DataFile.get(id)
+        DayValue.findAllByFile(file)
+    }
 }

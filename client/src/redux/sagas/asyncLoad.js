@@ -24,13 +24,17 @@ function* loadFiles() {
   yield call(loadFileListCall);
 }
 
+
+function* beginChartLoading({ id }) {
+  yield put({type: LOAD_CHART_DATA, id})
+}
+
+
 const routes = {
   '/': redirectToLogin,
   '/login': loginCheck,
   '/files': loadFiles,
-  '/files/:id': function* userSaga({ id }) {
-    yield put({type: LOAD_CHART_DATA, id});
-  },
+  '/files/:id': beginChartLoading,
 };
 
 export function* asyncLoad() {

@@ -17,9 +17,7 @@ class FileService {
     void deleteFile(Long id) {
         def dataFile = DataFile.get(id)
         List<DayValue> values = DayValue.findAllByFile(dataFile)
-        values.each {
-            it.delete(flush: true, failOnError: true)
-        }
+        values*.delete()
         dataFile.delete(flush: true, failOnError: true)
     }
 

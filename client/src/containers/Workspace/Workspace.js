@@ -5,11 +5,16 @@ import { connect } from 'react-redux';
 class Workspace extends React.Component {
 
   render() {
-    const chart = this.props.data ? this.props.data.toJS() : undefined;
+    if(!this.props.charts.get('isLoaded')) {
+      return null;
+    }
+    const active = this.props.params.id;
+    const chart = this.props.charts.getIn(['data', `${active}`]);
+    const data = chart ? chart.toJS().map(i => [i.date, i.value]) : [];
 
     return (
       <div>
-        <Chart data={chart}/>
+        <Chart data={data}/>
       </div>
     )
   }
@@ -17,7 +22,7 @@ class Workspace extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.charts.get('data')
+    charts: state.charts
   }
 };
 

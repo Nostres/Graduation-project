@@ -9,7 +9,6 @@ class ApplicationController implements PluginManagerAware {
 
     GrailsApplication grailsApplication
     GrailsPluginManager pluginManager
-    ChartService chartService
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
