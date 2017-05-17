@@ -13,7 +13,7 @@ const demands = [
 
 const formulas = [
   {value: 'S', label: 'Seasonal'},
-  {value: 'O', label: 'Offseason'}
+  {value: 'O', label: 'OffSeason'}
 ];
 
 const formulaToConversionMap = (s, d) => {
