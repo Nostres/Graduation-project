@@ -8,6 +8,8 @@ export const CALCULATE = 'chart/CALCULATE';
 export const CALCULATE_SUCCESS = 'chart/CALCULATE_SUCCESS';
 export const CALCULATE_FAIL = 'chart/CALCULATE_FAIL';
 
+export const CLEAR_ALL = 'chart/CLEAR_ALL';
+
 const initialState = fromJS({
   data: {},
   loading: false,
@@ -36,6 +38,8 @@ export default function reducer(state = initialState, action = {}) {
       return state.setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList));
     case CALCULATE_FAIL:
       return state.delete('calculating');
+    case CLEAR_ALL:
+      return initialState;
     default:
       return state;
   }

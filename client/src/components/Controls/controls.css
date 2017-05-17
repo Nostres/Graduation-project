@@ -3,22 +3,20 @@
     border: 1px solid #BBBBCC;
     border-radius: 7px;
     padding: 10px;
+    display: flex;
 }
 
 .control-item {
-    display: inline-block;
     margin: 0 20px 0 0;
+    float: left;
 }
 
 .control-button {
-    display: inline-block;
-    position: relative;
-    top: 30px;
+    float: left;
+    padding-top: 24px;
 }
 
 .control-item-input {
-    position: relative;
-    top: 32px;
-    display: inline-block;
     margin: 0 20px 0 0;
+    float: left;
 }

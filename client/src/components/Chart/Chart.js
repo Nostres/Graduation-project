@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHighcharts from 'react-highcharts';
 
-const buildConfig = (data) => {
+const buildConfig = (data, xAxis, yAxis, title, subtitle) => {
   return {
     chart: {
       zoomType: 'x'
@@ -9,23 +9,10 @@ const buildConfig = (data) => {
     rangeSelector: {
       selected: 1
     },
-    title: {
-      text: "Chart"
-    },
-    subtitle: {
-      text: 'Diploma'
-    },
-    yAxis: {
-      title: {
-        text: 'Value'
-      }
-    },
-    xAxis: {
-      title: {
-        text: 'Date'
-      },
-      type: 'datetime'
-    },
+    title,
+    subtitle,
+    yAxis: yAxis,
+    xAxis: xAxis,
     plotOptions: {
       line: {
         enableMouseTracking: false
@@ -39,10 +26,10 @@ const buildConfig = (data) => {
 
 export default class Chart extends React.Component {
   render() {
-    const { series } = this.props;
+    const { series, xAxis, yAxis, title, subtitle } = this.props;
     return (
-      <div className="chart-panel">
-        <ReactHighcharts config={buildConfig(series)} ref="chart"/>
+      <div>
+        <ReactHighcharts config={buildConfig(series, xAxis, yAxis, title, subtitle)} ref="chart"/>
       </div>
     )
   }

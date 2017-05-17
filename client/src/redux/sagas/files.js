@@ -50,7 +50,7 @@ export function* loadFileList() {
     const result = yield call(loadList, getToken(state));
     yield put({ type: GET_FILES_SUCCESS, payload: result });
   } catch (e) {
-    yield put({ type: GET_FILES_FAIL, e });
+    yield put({ type: GET_FILES_FAIL, payload: e.response });
   }
 }
 
@@ -62,7 +62,7 @@ export function* uploadFile(action) {
     yield put({ type: UPLOAD_FILE_SUCCESS, payload: result });
     yield put({ type: GET_FILES });
   } catch (e) {
-    yield put({ type: UPLOAD_FILE_FAIL, e });
+    yield put({ type: UPLOAD_FILE_FAIL, payload: e.response });
   }
 }
 
@@ -73,7 +73,7 @@ export function* deleteFile (action) {
     yield call(deleteF, getToken(state), id);
     yield put({ type: DELETE_FILE_SUCCESS, payload: id });
   } catch (e) {
-    yield put({ type: DELETE_FILE_FAIL, e });
+    yield put({ type: DELETE_FILE_FAIL, payload: e.response });
   }
 }
 

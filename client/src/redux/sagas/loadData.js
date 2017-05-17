@@ -9,12 +9,6 @@ import { RESTORE_USER, isUserLoggedIn } from '../reducers/user';
 import { LOAD_CHART_DATA } from '../reducers/charts';
 
 
-function* loginCheck() {
-  const state = yield select();
-  if (isUserLoggedIn(state)) {
-    yield call(browserHistory.push, '/files');
-  }
-}
 
 function* loadFiles() {
   const state = yield select();
@@ -32,12 +26,11 @@ function* beginChartLoading({ id }) {
 
 const routes = {
   '/': redirectToLogin,
-  '/login': loginCheck,
   '/files': loadFiles,
   '/files/:id': beginChartLoading,
 };
 
-export function* asyncLoad() {
+export function* loadData() {
   let state = yield select();
   const { routing } = state;
 

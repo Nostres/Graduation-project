@@ -8,8 +8,11 @@ import {
   LOGOUT_USER_FAIL
 } from '../reducers/user'
 import {
-  CLEAR_ALL
+  CLEAR_ALL as CLEAR_FILES
 } from '../reducers/files';
+import {
+  CLEAR_ALL as CLEAR_CHARTS
+} from '../reducers/charts';
 import sendRequest from '../utils/SendRequest';
 import { storeData, deleteData } from '../utils/Storage';
 
@@ -38,7 +41,7 @@ export function* login(action) {
 
     yield put({ type: LOGIN_USER_SUCCESS, payload: result });
   } catch (e) {
-    yield put({ type: LOGIN_USER_FAIL, e });
+    yield put({ type: LOGIN_USER_FAIL, payload: e.response });
   }
 }
 
@@ -48,7 +51,7 @@ export function* register(action) {
     const result = yield call(registerUser, username, password);
     yield put({ type: REGISTER_USER_SUCCESS, payload: result });
   } catch (e) {
-    yield put({ type: REGISTER_USER_FAIL, e });
+    yield put({ type: REGISTER_USER_FAIL, payload: e.response });
   }
 }
 
@@ -56,8 +59,9 @@ export function* logout() {
   try {
     deleteData('token');
     yield put({ type: LOGOUT_USER_SUCCESS });
-    yield put({ type: CLEAR_ALL });
+    yield put({ type: CLEAR_FILES });
+    yield put({ type: CLEAR_CHARTS });
   } catch (e) {
-    yield put({ type: LOGOUT_USER_FAIL, e });
+    yield put({ type: LOGOUT_USER_FAIL, payload: e.response });
   }
 }

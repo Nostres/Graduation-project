@@ -3,6 +3,8 @@ import Chart from '../../components/Chart/Chart';
 import Controls from '../../components/Controls/Controls';
 import { connect } from 'react-redux';
 
+import CoeffTable from './CoeffTable';
+
 import './workspace.css';
 
 
@@ -20,21 +22,7 @@ function buildSeria(name, type, data, color) {
       valueDecimals: 2
     }
   }
-  // {
-  //   name: 'Data 2',
-  //   // type: 'spline',
-  //   data: data2,
-  //   color: '#0000ff',
-  //   lineWidth: 4,
-  //   marker: {
-  //     radius: 7
-  //   },
-  //   tooltip: {
-  //     valueDecimals: 2
-  //   }
-  // }
 }
-
 
 
 class Workspace extends React.Component {
@@ -44,23 +32,56 @@ class Workspace extends React.Component {
       return null;
     }
 
-    const { chart, sample } = this.props;
-    const data = chart ? chart.toJS().map(i => [i.date, i.value]) : [];
+    const { chart, sample, coeffs, demandsACF, demandsPACF } = this.props;
+    const series = [];
 
-    const result = [];
-    if (sample) {
-      chart.toJS().forEach((data, i) => result.push([data.date, sample.get(`${i}`)]))
+    if(chart) {
+      const data = chart.toJS().map(i => [i.date, i.value]);
+      series.push(buildSeria('Data 1', 'spline', data, '#ff5050'));
     }
 
-    const seria1 = buildSeria('Data 1', 'spline', data, '#ff5050');
-    const seria2 = buildSeria('Result', 'spline', result, '#0000ff');
+    if(sample) {
+      const result = [];
+      if (sample) {
+        chart.toJS().forEach((data, i) => result.push([data.date, sample.get(`${i}`)]))
+      }
+      series.push(buildSeria('Result', 'spline', result, '#0000ff'))
+    }
 
     return (
-      <div className="workspace">
+      <div className="workspace" id="workspace">
         <div className="main-chart-panel">
-          <Chart series={[seria1, seria2]}/>
+          <Chart
+            series={series}
+            yAxis={{ title: { text: 'Value'}}}
+            xAxis={{ title: { text: 'Date' }, type: 'datetime'}}
+            title={{ text: 'Day values'}}
+          />
           <Controls dispatchAction={this.props.dispatchAction} />
         </div>
+        { (demandsACF || demandsPACF || coeffs) &&
+          <div className="main-chart-panel" style={{display:'flex'}}>
+            {
+              demandsACF &&
+              <div className="acf-pacf-chart-panel">
+                <Chart
+                  series={[buildSeria('Result', 'spline', demandsACF.toJS(), '#00aadd')]}
+                  title={{text: 'Autocorrelation'}}
+                />
+              </div>
+            }
+            {
+              demandsPACF &&
+              <div className="acf-pacf-chart-panel">
+                <Chart
+                  series={[buildSeria('Result', 'column', demandsPACF.toJS(), '#0000ff')]}
+                  title={{text: 'Partial autocorrelation'}}
+                />
+              </div>
+            }
+            <CoeffTable data={coeffs}/>
+          </div>
+        }
       </div>
     )
   }
@@ -71,7 +92,10 @@ const mapStateToProps = (state) => {
     active: state.charts.get('active'),
     chart: state.charts.getIn(['data', `${state.charts.get('active')}`]),
     sample: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'sample']),
-    isLoaded: state.charts.get('isLoaded')
+    isLoaded: state.charts.get('isLoaded'),
+    demandsACF: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'acf']),
+    demandsPACF: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'pacf']),
+    coeffs: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'coefficients'])
   }
 };
 

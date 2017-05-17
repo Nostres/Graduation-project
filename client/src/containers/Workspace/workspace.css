@@ -1,10 +1,32 @@
 .workspace {
-    margin-top: 64px;
+    margin: 64px 5px 5px 5px;
+    height: 100%;
+    min-height: 100%;
 }
 
 .main-chart-panel {
-    margin: 20px;
+    margin: 5px;
     padding: 10px;
     border: 1px solid #BBBBBB;
     border-radius: 7px;
+}
+
+.acf-pacf-chart-panel {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #BBBBBB;
+    border-radius: 7px;
+    /*position: relative;*/
+    display: block;
+    float: left;
+
+}
+
+.coef-table-key {
+    width: 100px;
+    font-weight: bold;
+}
+
+.coef-table-value {
+    width: 50px;
 }

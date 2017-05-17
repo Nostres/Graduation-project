@@ -81,6 +81,7 @@ export default class Controls extends React.Component {
             id="period-input"
             disabled={this.state.formulaValue.value === 'O'}
             inputRef={(c) => this.periodInput = c}
+            type="number"
           />
         </div>
         <div className="control-item-input" style={{width: '15%'}}>
@@ -88,6 +89,7 @@ export default class Controls extends React.Component {
           <FormControl
             id="period-count-input"
             inputRef={(c) => this.countInput = c}
+            type="number"
           />
         </div>
         <div className="control-button">

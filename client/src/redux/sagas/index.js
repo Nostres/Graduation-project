@@ -8,7 +8,7 @@ import { redirectToFiles, redirectToLogin } from './route';
 import { login, register, logout } from './user';
 import { uploadFile, loadFileList, deleteFile } from './files';
 import { loadChart, calculate } from './charts';
-import { asyncLoad } from './asyncLoad'
+import { loadData } from './loadData'
 
 export default function* rootSaga() {
   yield [
@@ -19,7 +19,7 @@ export default function* rootSaga() {
 
     takeLatest(REGISTER_USER, register),
 
-    takeLatest(LOCATION_CHANGE, asyncLoad),
+    takeLatest(LOCATION_CHANGE, loadData),
 
     takeLatest(LOAD_CHART_DATA, loadChart),
     takeLatest(CALCULATE, calculate),

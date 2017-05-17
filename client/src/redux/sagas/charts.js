@@ -23,7 +23,7 @@ export function* loadChart(action) {
     const result = yield call(load, getToken(state), id);
     yield put({ type: LOAD_CHART_SUCCESS, payload: { fileId: id, ...result }});
   } catch (e) {
-    yield put({ type: LOAD_CHART_DATA_FAIL, e });
+    yield put({ type: LOAD_CHART_DATA_FAIL, payload: e.response });
   }
 }
 
@@ -60,6 +60,6 @@ export function* calculate(action) {
     const result = yield call(sendCalc, getToken(state), obj);
     yield put({ type: CALCULATE_SUCCESS, payload: { result, fileId }});
   } catch (e) {
-    yield put({ type: CALCULATE_FAIL, e });
+    yield put({ type: CALCULATE_FAIL, payload: e.response });
   }
 }
