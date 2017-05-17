@@ -19,7 +19,7 @@ const formulas = [
 const formulaToConversionMap = (s, d) => {
   return {
     'S': { formula: 'Seasonal', data: { 'S': s, 'D': d } },
-    'O': { formula: 'Offseason', data: { 'D': d } }
+    'O': { formula: 'OffSeason', data: { 'D': d } }
   }
 };
 
