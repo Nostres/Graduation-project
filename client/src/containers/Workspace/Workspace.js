@@ -35,32 +35,36 @@ class Workspace extends React.Component {
     const { chart, sample, coeffs, demandsACF, demandsPACF } = this.props;
     const series = [];
 
-    if(chart) {
-      const data = chart.toJS().map(i => [i.date, i.value]);
-      series.push(buildSeria('Data 1', 'spline', data, '#ff5050'));
-    }
+    // if(chart) {
+    //   const data = chart.toJS().map(i => [i.date, i.value]);
+    //   series.push(buildSeria('Data 1', 'spline', data, '#ff5050'));
+    // }
 
     if(sample) {
       const result = [];
       if (sample) {
-        chart.toJS().forEach((data, i) => result.push([data.date, sample.get(`${i}`)]))
+        sample.toJS().forEach((k, i) => result.push([chart.getIn([`${i}`, 'date']), k]));
       }
-      series.push(buildSeria('Result', 'spline', result, '#0000ff'))
+      series.push(buildSeria('Result', 'spline', result, '#434353'));
+      // series.push(buildSeria('Result', 'spline', sample.toJS(), '#434333'));
     }
 
     return (
       <div className="workspace" id="workspace">
-        <div className="main-chart-panel">
+        <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
+          <div className="main-chart-holder">
           <Chart
             series={series}
             yAxis={{ title: { text: 'Value'}}}
             xAxis={{ title: { text: 'Date' }, type: 'datetime'}}
             title={{ text: 'Day values'}}
           />
-          <Controls dispatchAction={this.props.dispatchAction} />
+          </div>
+          <CoeffTable data={coeffs}/>
         </div>
-        { (demandsACF || demandsPACF || coeffs) &&
-          <div className="main-chart-panel" style={{display:'flex'}}>
+
+        { (demandsACF || demandsPACF ) &&
+          <div className="main-chart-panel" style={{display:'flex', align: 'center'}}>
             {
               demandsACF &&
               <div className="acf-pacf-chart-panel">
@@ -79,9 +83,11 @@ class Workspace extends React.Component {
                 />
               </div>
             }
-            <CoeffTable data={coeffs}/>
           </div>
         }
+
+        <Controls dispatchAction={this.props.dispatchAction}/>
+
       </div>
     )
   }

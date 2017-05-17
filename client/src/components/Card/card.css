@@ -1,0 +1,44 @@
+.card {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #BBBBBB;
+    overflow: hidden;
+    border-radius: 0 10px 0 10px;
+
+}
+
+.no-selection {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+}
+
+.card-header {
+    margin: 0px;
+    border: 1px solid #BBBBBB;
+    background-color: #BBBBBB;
+    border-radius: 0 5px 0 0;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    cursor: hand;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.card-body {
+    cursor: default;
+    width: 100%;
+    padding: 5px;
+}
+
+.card-footer {
+    position: absolute;
+    bottom:16px;
+    right: 16px;
+    cursor: se-resize;
+    margin: -20px -10px;
+}

@@ -32,8 +32,9 @@ export default class CoeffTable extends React.Component {
     }
 
     return (
-      <div className="acf-pacf-chart-panel">
+      <div className="chart-coefs-panel">
         <h1 style={{textAlign: 'center'}}>Coefficients</h1>
+        <hr/>
         <table style={{height: '200px'}}>
           <tbody>
             {buildTableRows(data)}

@@ -45,7 +45,8 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function calculate(demands, conversion) {
+export function calculate(demands, conversionData) {
+  const conversion = !conversionData || !conversionData.data.D ? null : conversionData;
   return {
     type: CALCULATE,
     demands,

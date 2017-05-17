@@ -11,6 +11,10 @@
     border-radius: 7px;
 }
 
+.main-chart-holder {
+    width: calc(100% - 260px)
+}
+
 .acf-pacf-chart-panel {
     margin: 5px;
     padding: 10px;
@@ -19,7 +23,17 @@
     /*position: relative;*/
     display: block;
     float: left;
+}
 
+.chart-coefs-panel {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #BBBBBB;
+    border-radius: 7px;
+    min-width: 250px;
+    width: 250px;
+    display: block;
+    float: right;
 }
 
 .coef-table-key {
