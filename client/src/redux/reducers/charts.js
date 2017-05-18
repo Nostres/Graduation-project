@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { LOGOUT_USER_SUCCESS } from './user';
 
 export const LOAD_CHART_DATA = 'chart/LOAD_CHART_DATA';
 export const LOAD_CHART_SUCCESS = 'chart/LOAD_CHART_SUCCESS';
@@ -7,8 +8,6 @@ export const LOAD_CHART_DATA_FAIL = 'chart/LOAD_CHART_DATA_FAIL';
 export const CALCULATE = 'chart/CALCULATE';
 export const CALCULATE_SUCCESS = 'chart/CALCULATE_SUCCESS';
 export const CALCULATE_FAIL = 'chart/CALCULATE_FAIL';
-
-export const CLEAR_ALL = 'chart/CLEAR_ALL';
 
 const initialState = fromJS({
   data: {},
@@ -38,7 +37,7 @@ export default function reducer(state = initialState, action = {}) {
       return state.setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList));
     case CALCULATE_FAIL:
       return state.delete('calculating');
-    case CLEAR_ALL:
+    case LOGOUT_USER_SUCCESS:
       return initialState;
     default:
       return state;

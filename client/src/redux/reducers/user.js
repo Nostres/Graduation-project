@@ -69,3 +69,6 @@ export function isUserLoggedIn(globalState) {
   return globalState.user.get('loggedIn');
 }
 
+export function isUserLogouting(globalState) {
+  return globalState.user.get('logOuting') === true;
+}

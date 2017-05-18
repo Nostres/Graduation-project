@@ -3,9 +3,9 @@ import { router } from 'redux-saga-router';
 import { browserHistory } from 'react-router';
 import { isFilesLoaded } from '../reducers/files';
 import { loadFileListCall } from './files';
-import { redirectToLogin } from './route';
+import { redirectToLogin, redirectToFiles } from './route';
 import { checkData, extractData } from '../utils/Storage';
-import { RESTORE_USER, isUserLoggedIn } from '../reducers/user';
+import { RESTORE_USER, isUserLoggedIn, isUserLogouting } from '../reducers/user';
 import { LOAD_CHART_DATA, calculate, LOAD_CHART_SUCCESS } from '../reducers/charts';
 
 
@@ -46,6 +46,12 @@ export function* loadData() {
 
   if (!isUserLoggedIn(state) && path !== '/login') {
     yield call(redirectToLogin);
+  }
+
+  state = yield select();
+
+  if(isUserLoggedIn(state) && path === '/login' && !(isUserLogouting(state)) ) {
+    yield call(redirectToFiles)
   }
 
   yield fork(router, browserHistory, routes);

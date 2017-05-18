@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { LOGOUT_USER_SUCCESS } from './user';
 
 export const GET_FILES = 'files/GET_FILES';
 export const GET_FILES_SUCCESS = 'files/GET_FILES_SUCCESS';
@@ -11,8 +12,6 @@ export const UPLOAD_FILE_FAIL = 'files/UPLOAD_FILE_FAIL';
 export const DELETE_FILE = 'files/DELETE_FILE';
 export const DELETE_FILE_SUCCESS = 'files/DELETE_FILE_SUCCESS';
 export const DELETE_FILE_FAIL = 'files/DELETE_FILE_FAIL';
-
-export const CLEAR_ALL = 'files/CLEAR_ALL';
 
 const initialState = fromJS({
   data: [],
@@ -46,7 +45,7 @@ export default function reducer(state = initialState, action = {}) {
     }
     case DELETE_FILE_FAIL:
       return state.delete('deleting');
-    case CLEAR_ALL:
+    case LOGOUT_USER_SUCCESS:
       return initialState;
     default:
       return state;
