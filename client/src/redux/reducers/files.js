@@ -13,6 +13,10 @@ export const DELETE_FILE = 'files/DELETE_FILE';
 export const DELETE_FILE_SUCCESS = 'files/DELETE_FILE_SUCCESS';
 export const DELETE_FILE_FAIL = 'files/DELETE_FILE_FAIL';
 
+export const UPDATE_DESCRIPTION = 'files/UPDATE_DESCRIPTION';
+export const UPDATE_DESCRIPTION_SUCCESS = 'files/UPDATE_DESCRIPTION_SUCCESS';
+export const UPDATE_DESCRIPTION_FAIL = 'files/UPDATE_DESCRIPTION_FAIL';
+
 const initialState = fromJS({
   data: [],
   loaded: false
@@ -43,6 +47,13 @@ export default function reducer(state = initialState, action = {}) {
       }
       return state;
     }
+    case UPDATE_DESCRIPTION_SUCCESS: {
+      const indexToUpdate = state.get('data').findIndex(i => i.get('id') === action.payload.id);
+      if (indexToUpdate > -1) {
+        return state.setIn(['data', `${indexToUpdate}`, 'description'], 'action.payload.text' );
+      }
+      return state;
+    }
     case DELETE_FILE_FAIL:
       return state.delete('deleting');
     case LOGOUT_USER_SUCCESS:
@@ -62,6 +73,10 @@ export function uploadFileAC(file) {
 
 export function deleteFileAC(id) {
   return { type: DELETE_FILE, id}
+}
+
+export function updateDescription(id, text) {
+  return { type: UPDATE_DESCRIPTION, id, text }
 }
 
 export function isFilesLoaded(storage) {

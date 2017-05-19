@@ -21,6 +21,7 @@ function loginUserRequest(username, password) {
   return sendRequest('api/login', options)
 }
 
+
 function registerUserRequest(username, password) {
   const options = {
     method: 'POST',

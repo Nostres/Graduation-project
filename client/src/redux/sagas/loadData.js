@@ -7,7 +7,25 @@ import { calculateAC, LOAD_CHART_SUCCESS, loadChartData, isChartDataLoaded } fro
 
 import { parsePath } from '../utils/PathParser';
 
-export function* loadData() {
+
+function* fetchDataByPath(state, path) {
+  const { matched, param } = parsePath(path);
+  if(matched) {
+    if(!isFilesLoaded(state)) {
+      yield put(getFilesAC())
+    }
+    if (param) {
+      if (!isChartDataLoaded(state, param)) {
+        yield put(loadChartData(param));
+        yield take(LOAD_CHART_SUCCESS);
+      }
+      yield put(calculateAC([], null));
+    }
+  }
+}
+
+
+export function* navigationResolver() {
   let state = yield select();
   const { routing } = state;
 
@@ -22,22 +40,8 @@ export function* loadData() {
     if(['/', '/login'].includes(path)) {
       yield call(redirectToFiles);
     }
+    yield call(fetchDataByPath, state, path);
   } else if(path !== '/login') {
     yield call(redirectToLogin);
-  }
-
-  const { matched, param } = parsePath(path);
-
-  if(matched) {
-    if(!isFilesLoaded(state)) {
-      yield put(getFilesAC())
-    }
-    if (param) {
-      if (!isChartDataLoaded(state, param)) {
-        yield put(loadChartData(param));
-        yield take(LOAD_CHART_SUCCESS);
-      }
-      yield put(calculateAC([], null));
-    }
   }
 }

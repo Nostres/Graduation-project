@@ -40,6 +40,12 @@ class FileService {
         dayValueService.addDayValueFromStream(file, request.inputStream)
     }
 
+    void updateDescription(Long id, String text) throws ServiceException {
+        DataFile dataFile = DataFile.get(id)
+        dataFile.setDescription(text)
+        dataFile.save(flush: true, failOnError: true)
+    }
+
     private static checkFileType(HttpServletRequest request) throws ServiceException {
         if (request.getHeader('content-type') != 'text/csv') {
             throw new ServiceException('Incorrect file format')

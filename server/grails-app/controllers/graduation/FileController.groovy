@@ -35,6 +35,11 @@ class FileController implements PluginManagerAware {
         render(view: 'successOperation', model: [message: 'File uploaded successful!'])
     }
 
+    def update() throws ServiceException {
+        fileService.updateDescription(request.JSON['id'] as Long, request.JSON['text'] as String)
+        render(view: 'successOperation', model: [message: 'File uploaded successful!'])
+    }
+
     def handleServiceException(ServiceException e) {
         def map = [message: e.message]
         response.status = 500

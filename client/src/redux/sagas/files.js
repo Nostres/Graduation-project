@@ -6,7 +6,9 @@ import {
   UPLOAD_FILE_FAIL,
   DELETE_FILE_SUCCESS,
   DELETE_FILE_FAIL,
-  GET_FILES
+  GET_FILES,
+  UPDATE_DESCRIPTION_FAIL,
+  UPDATE_DESCRIPTION_SUCCESS
 } from '../reducers/files';
 import sendRequest from '../utils/SendRequest';
 import { getToken } from '../utils/Storage';
@@ -32,6 +34,16 @@ function upload(token, file) {
   return sendRequest('file', options)
 }
 
+function updateDescr(token, obj) {
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(obj),
+    headers: {
+      'X-Auth-Token': token,
+    }
+  };
+  return sendRequest(`file/${obj.id}`, options)
+}
 
 function deleteF(token, id) {
   const options = {
@@ -73,5 +85,16 @@ export function* deleteFile (action) {
     yield put({ type: DELETE_FILE_SUCCESS, payload: id });
   } catch (e) {
     yield put({ type: DELETE_FILE_FAIL, payload: e.response });
+  }
+}
+
+export function* updateDescription(action) {
+  try {
+    const { id, text } = action;
+    const state = yield select();
+    yield call(updateDescr, getToken(state), { id, text } );
+    yield put({ type: UPDATE_DESCRIPTION_SUCCESS, payload: { id, text }});
+  } catch (e) {
+    yield put({ type: UPDATE_DESCRIPTION_FAIL, payload: e.response });
   }
 }

@@ -96,7 +96,9 @@ export default class Controls extends React.Component {
           <Button
             bsStyle="success"
             onClick={this.calculate}
-          >Calculate</Button>
+          >
+            Calculate
+          </Button>
         </div>
       </div>
     )

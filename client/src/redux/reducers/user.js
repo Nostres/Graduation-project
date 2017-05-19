@@ -57,6 +57,7 @@ export function logoutAC() {
   }
 }
 
+
 export function registerAC(username, password) {
   return {
     type: REGISTER_USER,
@@ -64,6 +65,7 @@ export function registerAC(username, password) {
     password
   }
 }
+
 
 export function isUserLoggedIn(globalState) {
   return globalState.user.get('loggedIn');
