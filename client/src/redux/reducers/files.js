@@ -52,15 +52,15 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function getFiles() {
+export function getFilesAC() {
   return { type: GET_FILES }
 }
 
-export function uploadFile(file) {
+export function uploadFileAC(file) {
   return { type: UPLOAD_FILE, file }
 }
 
-export function deleteFile(id) {
+export function deleteFileAC(id) {
   return { type: DELETE_FILE, id}
 }
 

@@ -2,7 +2,6 @@ import { put, call, select } from 'redux-saga/effects';
 import {
   GET_FILES_SUCCESS,
   GET_FILES_FAIL,
-  getFiles,
   UPLOAD_FILE_SUCCESS,
   UPLOAD_FILE_FAIL,
   DELETE_FILE_SUCCESS,
@@ -75,8 +74,4 @@ export function* deleteFile (action) {
   } catch (e) {
     yield put({ type: DELETE_FILE_FAIL, payload: e.response });
   }
-}
-
-export function* loadFileListCall() {
-  yield put(getFiles())
 }

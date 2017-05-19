@@ -13,9 +13,9 @@ export function extractData(key) {
   return storedData ? JSON.parse(storedData) : {};
 }
 
-export function checkData(key) {
+export function isDataStored(key) {
   const storedData = localStorage.getItem(`${APPLICATION_NAME}_${key}`);
-  return storedData !== null || storedData !== undefined || storedData !== '';
+  return storedData !== null;
 }
 
 export function deleteData(key) {

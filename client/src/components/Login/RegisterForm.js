@@ -8,8 +8,8 @@ import {
   Button
 } from 'react-bootstrap';
 
-import { register } from '../../redux/reducers/user';
-import { showMessage } from '../../redux/reducers/message';
+import { registerAC } from '../../redux/reducers/user';
+import { showMessageAC } from '../../redux/reducers/message';
 
 export default class RegisterForm extends React.Component {
 
@@ -22,9 +22,9 @@ export default class RegisterForm extends React.Component {
     e.preventDefault();
     const { username, password, password2 } = this;
     if (password !== password2) {
-      this.props.dispatchAction(showMessage('Passwords not equals', 'warning'));
+      this.props.dispatchAction(showMessageAC('Passwords not equals', 'warning'));
     }
-    this.props.dispatchAction(register(username.value, password.value));
+    this.props.dispatchAction(registerAC(username.value, password.value));
   }
 
   render() {

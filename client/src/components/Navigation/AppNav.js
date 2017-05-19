@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar } from 'react-bootstrap';
 import grailsLogo from '../../images/grails-cupsonly-logo-white.svg';
 import UserMenu from './UserMenu';
-import { uploadFile } from '../../redux/reducers/files';
+import { uploadFileAC } from '../../redux/reducers/files';
 import './appNav.css';
 
 export default class AppNav extends React.Component {
@@ -19,7 +19,7 @@ export default class AppNav extends React.Component {
 
   doUploadFile() {
     const file = this.inputElement.files[0];
-    this.props.dispatchAction(uploadFile(file));
+    this.props.dispatchAction(uploadFileAC(file));
     this.inputElement.value = "";
   }
 

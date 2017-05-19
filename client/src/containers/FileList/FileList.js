@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import trash from './trash-icon.png';
 import './fileList.css';
 
-import { deleteFile } from '../../redux/reducers/files';
+import { deleteFileAC } from '../../redux/reducers/files';
 
 const Trash = (props) => (
   <span>
@@ -50,7 +50,7 @@ class FileList extends React.Component {
   }
 
   deleteFile(id) {
-    this.props.dispatchAction(deleteFile(id))
+    this.props.dispatchAction(deleteFileAC(id))
   }
 
   render() {

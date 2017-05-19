@@ -44,7 +44,18 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function calculate(demands, conversionData) {
+export function loadChartData(id) {
+  return {
+    type: LOAD_CHART_DATA,
+    id
+  }
+}
+
+export function isChartDataLoaded(state, id) {
+  return state.charts.getIn(['data', `${id}`]) !== undefined;
+}
+
+export function calculateAC(demands, conversionData) {
   const conversion = !conversionData || !conversionData.data.D ? null : conversionData;
   return {
     type: CALCULATE,

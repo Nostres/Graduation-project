@@ -60,13 +60,13 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function closeModal() {
+export function closeModalAC() {
   return {
     type: CLOSE_MESSAGE
   }
 }
 
-export function showMessage(text, style) {
+export function showMessageAC(text, style) {
   return {
     type: SHOW_MESSAGE,
     text, style

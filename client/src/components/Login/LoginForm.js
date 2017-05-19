@@ -8,7 +8,7 @@ import {
   Button
 } from 'react-bootstrap';
 
-import { login } from '../../redux/reducers/user';
+import { loginAC } from '../../redux/reducers/user';
 
 export default class LoginForm extends React.Component {
 
@@ -20,7 +20,7 @@ export default class LoginForm extends React.Component {
   submit(e) {
     e.preventDefault();
     const { username, password } = this;
-    this.props.dispatchAction(login(username.value, password.value))
+    this.props.dispatchAction(loginAC(username.value, password.value))
   }
   
   render() {

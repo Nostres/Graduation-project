@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuItem, Nav, NavDropdown, NavItem } from 'react-bootstrap';
-import { getFiles } from '../../redux/reducers/files';
-import { logout } from '../../redux/reducers/user';
+import { getFilesAC } from '../../redux/reducers/files';
+import { logoutAC } from '../../redux/reducers/user';
 
 export default class UserMenu extends React.Component {
 
@@ -14,12 +14,12 @@ export default class UserMenu extends React.Component {
   }
 
   reloadData() {
-    this.props.dispatchAction(getFiles());
+    this.props.dispatchAction(getFilesAC());
   }
 
   logoutUser(e) {
     e.preventDefault();
-    this.props.dispatchAction(logout());
+    this.props.dispatchAction(logoutAC());
   }
 
   backToList(e) {

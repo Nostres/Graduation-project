@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, FormControl } from 'react-bootstrap';
 import Select from 'react-select';
-import { calculate } from '../../redux/reducers/charts';
+import { calculateAC } from '../../redux/reducers/charts';
 
 import 'react-select/dist/react-select.css';
 import './controls.css'
@@ -46,7 +46,7 @@ export default class Controls extends React.Component {
     const prd = this.periodInput.value;
     const cnt = this.countInput.value;
     const formula = formulaToConversionMap(prd, cnt)[this.state.formulaValue.value];
-    this.props.dispatchAction(calculate(demands, formula));
+    this.props.dispatchAction(calculateAC(demands, formula));
   }
 
   render() {
