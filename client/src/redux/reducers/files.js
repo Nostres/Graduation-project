@@ -50,7 +50,7 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_DESCRIPTION_SUCCESS: {
       const indexToUpdate = state.get('data').findIndex(i => i.get('id') === action.payload.id);
       if (indexToUpdate > -1) {
-        return state.setIn(['data', `${indexToUpdate}`, 'description'], 'action.payload.text' );
+        return state.setIn(['data', `${indexToUpdate}`, 'description'], action.payload.text);
       }
       return state;
     }
