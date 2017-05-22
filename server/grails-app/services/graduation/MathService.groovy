@@ -9,7 +9,6 @@ class MathService {
 
     def reformationService
     def coefficientService
-    def pythonRunService
 
     Map<String, ?> calculate(Calculations calculations) {
         DataFile dataFile = DataFile.get(calculations.getFileId())
@@ -33,8 +32,7 @@ class MathService {
         calculations.demands.forEach({ it ->
             String functionName = it.toLowerCase()
             if (ScriptConstants.availableFunction.contains(functionName)) {
-//                demandsMap.put(functionName, pythonRunService.execute(sample, functionName))
-                demandsMap.put(functionName, pythonRunService.sendToMathServer(sample, functionName))
+                demandsMap.put(functionName, PythonRunService.sendToMathServer(sample, functionName))
             }
         })
         return [

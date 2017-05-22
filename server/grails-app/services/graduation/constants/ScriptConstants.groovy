@@ -5,6 +5,7 @@ class ScriptConstants {
 
     public static final List<String> availableFunction = [
             'acf',
-            'pacf'
+            'pacf',
+            'ccf'
     ]
 }
