@@ -1,19 +1,18 @@
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.stattools import acf, pacf
-
 from flask import Flask, json, Response, request
+
+
 app = Flask(__name__)
 
 
 def calc_acf(pct):
-    pacfres = pacf(pct, nlags=50, method='ols')
-    return np.around(pacfres, decimals=5).tolist()
+    return acf(pct, nlags=50)
 
 
 def calc_pacf(pct):
-    pacfres = pacf(pct, nlags=50, method='ols')
-    return np.around(pacfres, decimals=5).tolist()
+    return pacf(pct, nlags=50, method='ols')
 
 
 def fourmulas(formula):
@@ -23,14 +22,11 @@ def fourmulas(formula):
     }[formula]
 
 
-
 @app.route("/calc/<formula>", methods=['POST'])
 def calc(formula):
     sample = pd.Series(map(float, request.json))
     pct = sample.pct_change().dropna()
-
-    res = fourmulas(formula)(pct)
-
+    res = np.around(fourmulas(formula)(pct), decimals=5).tolist()
     json_res = json.dumps(res)
     resp = Response(json_res, status=200, mimetype='application/json')
     return resp
