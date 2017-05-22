@@ -14,9 +14,9 @@
         
     cd math
         
-    pip install -r ./requirements.txt
+    source bin/activate
         
-    source math/bin/activate
+    pip install -r ./requirements.txt
         
     python src/graduation/math.py
 
