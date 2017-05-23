@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.stattools import acf, pacf
+from statsmodels.tsa.arima_model import ARIMA
 from flask import Flask, json, Response, request
 
 app = Flask(__name__)
@@ -28,8 +29,18 @@ def calc_ccf(data):
     return np.correlate(pct1, pct2, 'full')
 
 
-def calc_arima(data):
-    return data
+def calc_arma(data):
+    size = int(len(data) * 0.66)
+    train, test = data[0:size], data[size:len(data)]
+    history = [x for x in train]
+    result = []
+    for t in range(len(test)):
+        model = ARIMA(history, order=(2, 2, 0))
+        model_fit = model.fit(start_params=[.1, .1, .1, .1], trend='nc', disp=0)
+        output = model_fit.forecast()
+        yhat = output[0]
+        result.append(yhat)
+    return result
 
 
 def formulas(formula, data):
