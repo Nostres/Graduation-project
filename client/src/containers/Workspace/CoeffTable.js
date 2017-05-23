@@ -17,7 +17,7 @@ const buildTableRows = (data) => {
     result.push(
       <tr key={k}>
         <td className="coef-table-key">{i.title}</td>
-        <td className="coef-table-value">{data.get(`${i.field}`)}</td>
+        <td className="coef-table-value">{parseFloat(data.get(`${i.field}`)).toFixed(5)}</td>
       </tr>)
   });
   return result;
