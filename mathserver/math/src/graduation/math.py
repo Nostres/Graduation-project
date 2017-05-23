@@ -7,15 +7,17 @@ app = Flask(__name__)
 
 
 def calc_acf(data):
-    sample = pd.Series(map(float, data[0]))
+    sample = pd.Series(map(float, data))
     pct = sample.pct_change().dropna()
-    return acf(pct, nlags=50)
+    acfResult = acf(pct, nlags=50)
+    return np.around(acfResult, decimals=5).tolist()
 
 
 def calc_pacf(data):
-    sample = pd.Series(map(float, data[0]))
+    sample = pd.Series(map(float, data))
     pct = sample.pct_change().dropna()
-    return pacf(pct, nlags=50, method='ols')
+    pacfResult = pacf(pct, nlags=50, method='ols')
+    return np.around(pacfResult, decimals=5).tolist()
 
 
 def calc_ccf(data):
@@ -26,21 +28,19 @@ def calc_ccf(data):
     return np.correlate(pct1, pct2, 'full')
 
 
-def fourmulas(formula):
-    return {
-        'acf': calc_acf,
-        'pacf': calc_pacf,
-        'ccf': calc_ccf
-    }[formula]
+def calc_arima(data):
+    return data
+
+
+def formulas(formula, data):
+    return globals()["calc_" + formula](data)
 
 
 @app.route("/calc/<formula>", methods=['POST'])
 def calc(formula):
     data = request.json
-    res = np.around(fourmulas(formula)(data), decimals=5).tolist()
-    json_res = json.dumps(res)
-    resp = Response(json_res, status=200, mimetype='application/json')
-    return resp
+    json_res = json.dumps(formulas(formula, data))
+    return Response(json_res, status=200, mimetype='application/json')
 
 
 if __name__ == "__main__":

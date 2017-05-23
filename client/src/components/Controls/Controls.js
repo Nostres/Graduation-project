@@ -8,7 +8,8 @@ import './controls.css'
 
 const demands = [
   {value: 'acf', label: 'Autocorrelation function'},
-  {value: 'pacf', label: 'Partial autocorrelation function'}
+  {value: 'pacf', label: 'Partial autocorrelation function'},
+  {value: 'ccf', label: 'Cross-correlation function'}
 ];
 
 const formulas = [
