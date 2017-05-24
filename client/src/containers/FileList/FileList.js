@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import Description from './Description';
+import Fader from '../../components/Fader/Fader';
 
 import './fileList.css';
 
@@ -82,7 +83,8 @@ class FileList extends React.Component {
 
   render() {
     return(
-      <div className="filelist-table">
+      <Fader>
+      <div className="filelist-table" key='filelist-table'>
         <div className="filelist-table-menu">
           <h1>File list</h1>
           <ButtonGroup justified>
@@ -111,6 +113,7 @@ class FileList extends React.Component {
           ref={input => this.inputElement = input}
         />
       </div>
+      </Fader>
     )
   }
 }
