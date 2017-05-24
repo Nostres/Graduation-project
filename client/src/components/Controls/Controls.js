@@ -9,7 +9,13 @@ import './controls.css'
 const demands = [
   {value: 'acf', label: 'Autocorrelation function'},
   {value: 'pacf', label: 'Partial autocorrelation function'},
-  {value: 'ccf', label: 'Cross-correlation function'}
+  {value: 'ccf', label: 'Cross-correlation function'},
+  {value: 'arma', label: 'Autoregressive–moving-average model'},
+];
+
+const goals = [
+  {value: 'value', label: 'Value'},
+  {value: 'degree', label: 'Degree'}
 ];
 
 const formulas = [
@@ -28,10 +34,11 @@ export default class Controls extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { demandsValues : [], formulaValue: formulas[0] };
+    this.state = { demandsValues : [], formulaValue: formulas[0], goalList: [] };
     this.calculate = this.calculate.bind(this);
     this.handleDemandsChange = this.handleDemandsChange.bind(this);
     this.handleFormulaChange = this.handleFormulaChange.bind(this);
+    this.handleGoalsChange = this.handleGoalsChange.bind(this);
   }
 
   handleFormulaChange(value) {
@@ -40,6 +47,10 @@ export default class Controls extends React.Component {
 
   handleDemandsChange(value) {
     this.setState({ ...this.state, demandsValues: value })
+  }
+
+  handleGoalsChange(value) {
+    this.setState({ ...this.state, goalList: value })
   }
 
   calculate() {
@@ -53,7 +64,7 @@ export default class Controls extends React.Component {
   render() {
     return (
       <div className="control-panel">
-        <div className="control-item" style={{width: '40%'}}>
+        <div className="control-item" style={{width: '20%'}}>
           <label htmlFor="demands-select">Demands</label>
           <Select
             id="demands-select"
@@ -63,6 +74,18 @@ export default class Controls extends React.Component {
             value={this.state.demandsValues}
             onChange={this.handleDemandsChange}
             searchable={false}
+          />
+        </div>
+        <div className="control-item" style={{width: '20%'}}>
+          <label htmlFor="goal-select">Goals</label>
+          <Select
+              id="goal-select"
+              name="goal"
+              options={goals}
+              multi={true}
+              value={this.state.goalList}
+              onChange={this.handleGoalsChange}
+              searchable={false}
           />
         </div>
         <div className="control-item" style={{width: '15%'}}>

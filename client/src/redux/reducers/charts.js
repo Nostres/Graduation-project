@@ -34,7 +34,9 @@ export default function reducer(state = initialState, action = {}) {
     case CALCULATE:
       return state.set('calculating', true);
     case CALCULATE_SUCCESS:
-      return state.setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList));
+      return state
+          .setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList))
+          .setIn(['degreeList', `${action.payload.fileId}`], fromJS(action.payload.result.degreeList));
     case CALCULATE_FAIL:
       return state.delete('calculating');
     case LOGOUT_USER_SUCCESS:

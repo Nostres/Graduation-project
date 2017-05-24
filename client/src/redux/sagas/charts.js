@@ -46,7 +46,7 @@ function buildReqestJson(action, fileId) {
     calculations: {
       fileId: fileId,
       demands: action.demands,
-      goalList: ["value"],
+      goalList: ["value", "degree"],
       conversion: action.conversion
     }
   }

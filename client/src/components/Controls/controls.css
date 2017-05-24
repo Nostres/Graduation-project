@@ -1,5 +1,5 @@
 .control-panel {
-    margin: 0 15% 0 15%;
+    margin: 0 3% 0 2%;
     border: 1px solid #BBBBCC;
     border-radius: 7px;
     padding: 10px;
@@ -7,7 +7,7 @@
     position: fixed;
     z-index: 5;
     bottom: 20px;
-    width: 70%;
+    width: 95%;
     background-color: #dddddd;
 }
 .Select-menu-outer {
