@@ -21,6 +21,14 @@ class FileService {
         dataFile.delete(flush: true, failOnError: true)
     }
 
+    DataFile getFile(Long id) {
+        DataFile dataFile = DataFile.findById(id)
+        if (dataFile == null) {
+            throw new NullPointerException()
+        }
+        return dataFile
+    }
+
     def addDataFromStream(User user, HttpServletRequest request) throws ServiceException {
         checkUser(user)
         checkFileType(request)
@@ -47,7 +55,7 @@ class FileService {
     }
 
     private static checkFileType(HttpServletRequest request) throws ServiceException {
-        if (request.getHeader('content-type') != 'text/csv') {
+        if (request.getHeader('content-type') != 'text/csv' && request.getHeader('content-type') != 'application/vnd.ms-excel') {
             throw new ServiceException('Incorrect file format')
         }
     }

@@ -45,6 +45,7 @@ function buildReqestJson(action, fileId) {
   return {
     calculations: {
       fileId: fileId,
+      sample: action.sample,
       demands: action.demands,
       goalList: ["value", "degree"],
       conversion: action.conversion
@@ -56,8 +57,8 @@ export function* calculate(action) {
   try {
     const state = yield select();
     const fileId = state.charts.get('active');
-    const obj = buildReqestJson(action, fileId);
-    const result = yield call(sendCalc, getToken(state), obj);
+    const body = buildReqestJson(action, fileId);
+    const result = yield call(sendCalc, getToken(state), body);
     yield put({ type: CALCULATE_SUCCESS, payload: { result, fileId }});
   } catch (e) {
     yield put({ type: CALCULATE_FAIL, payload: e.response });

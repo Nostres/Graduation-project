@@ -9,18 +9,35 @@ class MathService {
 
     def reformationService
     def coefficientService
+    def fileService
 
-    Map<String, ?> calculate(Calculations calculations) {
-        DataFile dataFile = DataFile.get(calculations.getFileId())
-        if (dataFile == null) {
-            throw new NullPointerException()
+    @Transactional(readOnly = true)
+    List<DayValue> transformsSample(List<DayValue> date, Map<String, ?> response) {
+        List<DayValue> data = []
+        response.get('Value').get('sample').eachWithIndex{ el, idx ->
+            DayValue dayValue = date.get(idx)
+            dayValue.setValue(el as Double)
+            dayValue.setDegree(response.get('Degree').get('sample').get(idx) as Double)
+            data.add(dayValue)
         }
-        List<DayValue> data = DayValue.findAllByFile(dataFile)
+        return data
+    }
+
+    @Transactional(readOnly = true)
+    Map<String, ?> calculate(Calculations calculations) {
+        List<DayValue> dataByFile = DayValue.findAllByFile(fileService.getFile(calculations.getFileId()))
+        List<DayValue> dataByRequest = calculations.getSample()
+        List<DayValue> data = dataByRequest ? dataByRequest : dataByFile
         Map<String, ?> response = [:]
         calculations.goalList.forEach({ it ->
-            response.put(it + "List", calculationFlow(calculations, data*."get${it.capitalize()}"() as List))
+            String type = it.capitalize()
+            response.put(type, calculationFlow(calculations, data*."get${type}"()))
         })
-        return response
+        return [
+                data: transformsSample(data, response),
+                valueList: response.get('Value'),
+                degreeList: response.get('Degree'),
+        ]
     }
 
     Map<String, ?> calculationFlow(Calculations calculations, List sample) {

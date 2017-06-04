@@ -27,100 +27,155 @@ function buildSeria(name, type, data, color) {
 
 class Workspace extends React.Component {
 
-  render() {
-    if(!this.props.isLoaded) {
-      return null;
-    }
-
-    const { chart, sample, coeffs, demandsACF, demandsPACF, sample1, coeffs1, demandsACF1, demandsPACF1 } = this.props;
-    const series = [];
-    const series1 = [];
-
-    // if(chart) {
-    //   const data = chart.toJS().map(i => [i.date, i.value]);
-    //   series.push(buildSeria('Data 1', 'spline', data, '#ff5050'));
-    // }
-
-    if(sample) {
-      const result = [];
-      if (sample) {
-        sample.toJS().forEach((k, i) => result.push([chart.getIn([`${i}`, 'date']), k]));
-      }
-      series.push(buildSeria('Result', 'spline', result, '#000000'));
-      // series.push(buildSeria('Result', 'spline', sample.toJS(), '#434333'));
-    }
-
-      if(sample1) {
-          const result = [];
-          if (sample1) {
-              sample1.toJS().forEach((k, i) => result.push([chart.getIn([`${i}`, 'date']), k]));
-          }
-          series1.push(buildSeria('Result', 'spline', result, '#b80300'));
-          // series.push(buildSeria('Result', 'spline', sample.toJS(), '#434333'));
-      }
-
-    return (
-      <div className="workspace" id="workspace">
-        <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
-          <div className="main-chart-holder">
-          <Chart
-            series={series}
-            yAxis={{ title: { text: 'Value'}}}
-            xAxis={{ title: { text: 'Date' }, type: 'datetime'}}
-            title={{ text: 'Day values'}}
-          />
-          </div>
-          <CoeffTable data={coeffs}/>
-        </div>
-
-        <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
-          <div className="main-chart-holder">
-            <Chart
-                series={series1}
-                yAxis={{ title: { text: 'Value'}}}
-                xAxis={{ title: { text: 'Date' }, type: 'datetime'}}
-                title={{ text: 'Degree values'}}
-            />
-          </div>
-          <CoeffTable data={coeffs1}/>
-        </div>
-
-        { (demandsACF || demandsPACF ) &&
-          <div className="main-chart-panel" style={{display:'flex', align: 'center'}}>
-            {
-              demandsACF &&
-              <div className="acf-pacf-chart-panel">
-                <Chart
-                  series={[buildSeria('Result', 'spline', demandsACF.toJS(), '#00aadd')]}
-                  title={{text: 'Autocorrelation'}}
-                />
-              </div>
-            }
-            {
-              demandsPACF &&
-              <div className="acf-pacf-chart-panel">
-                <Chart
-                  series={[buildSeria('Result', 'column', demandsPACF.toJS(), '#0000ff')]}
-                  title={{text: 'Partial autocorrelation'}}
-                />
-              </div>
-            }
-          </div>
+    render() {
+        if (!this.props.isLoaded) {
+            return null;
         }
 
-        <Controls dispatchAction={this.props.dispatchAction}/>
+        const {chart, coeffs, demandsACF, demandsPACF, coeffs1, demandsACF1, demandsPACF1} = this.props;
+        const series = [];
+        const series1 = [];
+        const asymmetry = coeffs ? Math.abs(coeffs.get('asymmetry')) : 0;
+        const asymmetry1 = coeffs1 ? Math.abs(coeffs1.get('asymmetry')) : 0;
 
-      </div>
-    )
-  }
+        if (chart) {
+            const values = chart.map(function(it){return [new Date(it.get('date')), it.get('value')]}).toJSON();
+            const degrees = chart.map(function(it){return [new Date(it.get('date')), it.get('degree')]}).toJSON();
+            series.push(buildSeria('Result', 'spline', values, '#000000'));
+            series1.push(buildSeria('Result', 'spline', degrees, '#b80300'));
+        }
+
+        return (
+            <div className="workspace" id="workspace">
+              <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
+                <div className="main-chart-holder">
+                  <Chart
+                      series={series}
+                      yAxis={{title: {text: 'Value'}}}
+                      xAxis={{title: {text: 'Date'}, type: 'datetime'}}
+                      title={{text: 'Day values'}}
+                  />
+                </div>
+                <CoeffTable data={coeffs}/>
+              </div>
+
+              <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
+                <div className="main-chart-holder">
+                  <Chart
+                      series={series1}
+                      yAxis={{title: {text: 'Value'}}}
+                      xAxis={{title: {text: 'Date'}, type: 'datetime'}}
+                      title={{text: 'Degree values'}}
+                  />
+                </div>
+                <CoeffTable data={coeffs1}/>
+              </div>
+
+                { (demandsACF || demandsPACF ) &&
+                <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
+                    {
+                        demandsACF &&
+                        <div className="acf-pacf-chart-panel">
+                          <Chart
+                              series={[buildSeria('Result', 'spline', demandsACF.toJS(), '#00aadd')]}
+                              title={{text: 'Autocorrelation'}}
+                              yAxis={{
+                                  plotBands: [{
+                                      from: -asymmetry,
+                                      to: asymmetry,
+                                      color: 'rgba(68, 170, 213, 0.1)',
+                                      label: {
+                                          text: 'asymmetry',
+                                          style: {color: '#606060'}
+                                      }
+                                  }]
+                              }
+                              }
+                          />
+                        </div>
+                    }
+                    {
+                        demandsPACF &&
+                        <div className="acf-pacf-chart-panel">
+                          <Chart
+                              series={[buildSeria('Result', 'column', demandsPACF.toJS(), '#0000ff')]}
+                              title={{text: 'Partial autocorrelation'}}
+                              yAxis={{
+                                  plotBands: [{
+                                      from: -asymmetry,
+                                      to: asymmetry,
+                                      color: 'rgba(68, 170, 213, 0.1)',
+                                      label: {
+                                          text: 'asymmetry',
+                                          style: {color: '#606060'}
+                                      }
+                                  }]
+                              }
+                              }
+                          />
+                        </div>
+                    }
+                </div>
+                }
+
+                { (demandsACF1 || demandsPACF1 ) &&
+                <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
+                    {
+                        demandsACF1 &&
+                        <div className="acf-pacf-chart-panel">
+                          <Chart
+                              series={[buildSeria('Result', 'spline', demandsACF1.toJS(), '#00aadd')]}
+                              title={{text: 'Autocorrelation for Deegre'}}
+                              yAxis={{
+                                  plotBands: [{
+                                      from: -asymmetry1,
+                                      to: asymmetry1,
+                                      color: 'rgba(68, 170, 213, 0.1)',
+                                      label: {
+                                          text: 'asymmetry',
+                                          style: {color: '#606060'}
+                                      }
+                                  }]
+                              }
+                              }
+                          />
+                        </div>
+                    }
+                    {
+                        demandsPACF1 &&
+                        <div className="acf-pacf-chart-panel">
+                          <Chart
+                              series={[buildSeria('Result', 'column', demandsPACF1.toJS(), '#0000ff')]}
+                              title={{text: 'Partial autocorrelation for Deegre'}}
+                              yAxis={{
+                                  plotBands: [{
+                                      from: -asymmetry1,
+                                      to: asymmetry1,
+                                      color: 'rgba(68, 170, 213, 0.1)',
+                                      label: {
+                                          text: 'asymmetry',
+                                          style: {color: '#606060'}
+                                      }
+                                  }]
+                              }
+                              }
+                          />
+                        </div>
+                    }
+                </div>
+                }
+
+              <Controls dispatchAction={this.props.dispatchAction} data={chart}/>
+
+            </div>
+        )
+    }
 }
 
 const mapStateToProps = (state) => {
   return {
     active: state.charts.get('active'),
     chart: state.charts.getIn(['data', `${state.charts.get('active')}`]),
-    sample: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'sample']),
-    sample1: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'sample']),
     isLoaded: state.charts.get('isLoaded'),
     demandsACF: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'acf']),
     demandsACF1: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'demands', 'acf']),

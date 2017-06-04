@@ -35,6 +35,7 @@ export default function reducer(state = initialState, action = {}) {
       return state.set('calculating', true);
     case CALCULATE_SUCCESS:
       return state
+          .setIn(['data', `${action.payload.fileId}`], fromJS(action.payload.result.data))
           .setIn(['valueList', `${action.payload.fileId}`], fromJS(action.payload.result.valueList))
           .setIn(['degreeList', `${action.payload.fileId}`], fromJS(action.payload.result.degreeList));
     case CALCULATE_FAIL:
@@ -57,11 +58,13 @@ export function isChartDataLoaded(state, id) {
   return state.charts.getIn(['data', `${id}`]) !== undefined;
 }
 
-export function calculateAC(demands, conversionData) {
+export function calculateAC(demands, conversionData, data) {
   const conversion = !conversionData || !conversionData.data.D ? null : conversionData;
+  const sample = data ? data.toJSON() : [];
   return {
     type: CALCULATE,
     demands,
-    conversion
+    conversion,
+    sample
   }
 }

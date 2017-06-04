@@ -13,10 +13,6 @@ const demands = [
   {value: 'arma', label: 'Autoregressive–moving-average model'},
 ];
 
-const goals = [
-  {value: 'value', label: 'Value'},
-  {value: 'degree', label: 'Degree'}
-];
 
 const formulas = [
   {value: 'S', label: 'Seasonal'},
@@ -58,13 +54,13 @@ export default class Controls extends React.Component {
     const prd = this.periodInput.value;
     const cnt = this.countInput.value;
     const formula = formulaToConversionMap(prd, cnt)[this.state.formulaValue.value];
-    this.props.dispatchAction(calculateAC(demands, formula));
+    this.props.dispatchAction(calculateAC(demands, formula, this.props.data));
   }
 
   render() {
     return (
       <div className="control-panel">
-        <div className="control-item" style={{width: '20%'}}>
+        <div className="control-item" style={{width: '25%'}}>
           <label htmlFor="demands-select">Demands</label>
           <Select
             id="demands-select"
@@ -77,18 +73,6 @@ export default class Controls extends React.Component {
           />
         </div>
         <div className="control-item" style={{width: '20%'}}>
-          <label htmlFor="goal-select">Goals</label>
-          <Select
-              id="goal-select"
-              name="goal"
-              options={goals}
-              multi={true}
-              value={this.state.goalList}
-              onChange={this.handleGoalsChange}
-              searchable={false}
-          />
-        </div>
-        <div className="control-item" style={{width: '15%'}}>
           <label htmlFor="formula-select">Formula</label>
           <Select
             id="formula-select"

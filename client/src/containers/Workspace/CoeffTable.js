@@ -3,12 +3,12 @@ import React from 'react';
 import './workspace.css';
 
 const dataMap = [
-  { title: 'Size', field: 'size' },
-  { title: 'Average value', field: 'averageValue' },
-  { title: 'Variance', field: 'variance' },
-  { title: 'Deviation', field: 'deviation' },
-  { title: 'Asymmetry', field: 'asymmetry' },
-  { title: 'Excess', field: 'excess' }
+  { title: 'Size', field: 'size', accuracy: 0 },
+  { title: 'Average value', field: 'averageValue', accuracy: 2 },
+  { title: 'Variance', field: 'variance', accuracy: 5 },
+  { title: 'Deviation', field: 'deviation', accuracy: 5 },
+  { title: 'Asymmetry', field: 'asymmetry', accuracy: 5 },
+  { title: 'Excess', field: 'excess', accuracy: 5 }
 ];
 
 const buildTableRows = (data) => {
@@ -17,7 +17,7 @@ const buildTableRows = (data) => {
     result.push(
       <tr key={k}>
         <td className="coef-table-key">{i.title}</td>
-        <td className="coef-table-value">{parseFloat(data.get(`${i.field}`)).toFixed(5)}</td>
+        <td className="coef-table-value">{parseFloat(data.get(`${i.field}`)).toFixed(i.accuracy)}</td>
       </tr>)
   });
   return result;
