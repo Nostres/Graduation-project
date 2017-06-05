@@ -1,42 +1,48 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, ButtonGroup, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import trash from './trash-icon.png';
+import Description from './Description';
+import Fader from '../../components/Fader/Fader';
+
 import './fileList.css';
 
-import { deleteFile } from '../../redux/reducers/files';
+import {
+  uploadFileAC,
+  deleteFileAC,
+  getFilesAC,
+  updateDescription
+} from '../../redux/reducers/files';
 
 const Trash = (props) => (
   <span>
-    <span className="remove-button" onClick={props.onDeleteFile}>
-      <img src={trash} alt="Grails"/>
-    </span>
+    <span className="glyphicon glyphicon-trash as-button" onClick={props.onDeleteFile}/>
   </span>
 );
 
-const TableRow = (num, rec, deleteFile) => (
+const TableRow = (num, rec, deleteFile, saveText) => (
   <tr key={num}>
     <td>{num + 1}</td>
     <td>
       <Link to={`files/${rec.get('id')}`}>{rec.get('name')}</Link>
       <Trash onDeleteFile={() => deleteFile(rec.get('id'))}/>
     </td>
-    <td>{rec.get('description')}</td>
+    <td>
+      <Description text={rec.get('description')} onSave={(text) => saveText(text, rec.get('id'))}/>
+    </td>
     <td>{new Date(rec.get('created')).toDateString()}</td>
     <td>{new Date(rec.get('updated')).toDateString()}</td>
   </tr>
 );
 
-
-const transformFiles = (files, deleteFile) => {
+const transformFiles = (files, deleteFile, saveText) => {
   if (!files) {
     return null;
   }
   const result = [];
   files.forEach((item, i) => {
-    result.push(TableRow(i, item, deleteFile))
+    result.push(TableRow(i, item, deleteFile, saveText))
   });
   return result;
 };
@@ -47,16 +53,45 @@ class FileList extends React.Component {
   constructor(props) {
     super(props);
     this.deleteFile = this.deleteFile.bind(this);
+    this.selectFile = this.selectFile.bind(this);
+    this.reloadData = this.reloadData.bind(this);
+    this.doUploadFile = this.doUploadFile.bind(this);
+    this.saveDescription = this.saveDescription.bind(this);
   }
 
   deleteFile(id) {
-    this.props.dispatchAction(deleteFile(id))
+    this.props.dispatchAction(deleteFileAC(id))
+  }
+
+  selectFile() {
+    this.inputElement.click()
+  }
+
+  doUploadFile() {
+    const file = this.inputElement.files[0];
+    this.props.dispatchAction(uploadFileAC(file));
+    this.inputElement.value = "";
+  }
+
+  reloadData() {
+    this.props.dispatchAction(getFilesAC());
+  }
+
+  saveDescription(text, id) {
+    this.props.dispatchAction(updateDescription(id, text))
   }
 
   render() {
     return(
-      <div className="filelist-table">
-        <h1>File list</h1>
+      <Fader>
+      <div className="filelist-table" key='filelist-table'>
+        <div className="filelist-table-menu">
+          <h1>File list</h1>
+          <ButtonGroup justified>
+            <Button href="#" onClick={this.reloadData}>Refresh list</Button>
+            <Button href="#" onClick={this.selectFile}>Upload file</Button>
+          </ButtonGroup>
+        </div>
         <Table striped bordered condensed hover>
           <thead>
             <tr>
@@ -68,10 +103,17 @@ class FileList extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {transformFiles(this.props.files, this.deleteFile)}
+          {transformFiles(this.props.files, this.deleteFile, this.saveDescription)}
           </tbody>
         </Table>
+        <input
+          onChange={this.doUploadFile}
+          style={{display: 'none'}}
+          type="file"
+          ref={input => this.inputElement = input}
+        />
       </div>
+      </Fader>
     )
   }
 }

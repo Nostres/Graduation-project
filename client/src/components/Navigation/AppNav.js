@@ -1,26 +1,26 @@
 import React from 'react';
-import { Navbar } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import grailsLogo from '../../images/grails-cupsonly-logo-white.svg';
-import UserMenu from './UserMenu';
-import { uploadFile } from '../../redux/reducers/files';
+import { logoutAC } from '../../redux/reducers/user';
+
 import './appNav.css';
 
 export default class AppNav extends React.Component {
 
   constructor(props) {
     super(props);
-    this.selectFile = this.selectFile.bind(this);
-    this.doUploadFile = this.doUploadFile.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
+    this.backToList = this.backToList.bind(this);
   }
 
-  selectFile() {
-    this.inputElement.click()
+  logoutUser(e) {
+    e.preventDefault();
+    this.props.dispatchAction(logoutAC());
   }
 
-  doUploadFile() {
-    const file = this.inputElement.files[0];
-    this.props.dispatchAction(uploadFile(file));
-    this.inputElement.value = "";
+  backToList(e) {
+    e.preventDefault();
+    this.props.router.push('/files');
   }
 
   render() {
@@ -35,21 +35,20 @@ export default class AppNav extends React.Component {
           </Navbar.Brand>
           <Navbar.Toggle/>
         </Navbar.Header>
+        <Navbar.Collapse>
         {
           this.props.loggedIn &&
-          <UserMenu
-            dispatchAction={this.props.dispatchAction}
-            files={this.props.files}
-            router={this.props.router}
-            onUploadFile={this.selectFile}
-          />
+          <Nav pullRight>
+            {
+              this.props.router.params.id !== undefined &&
+              <NavItem eventKey={1} onClick={this.backToList}>
+                Return to files list
+              </NavItem>
+            }
+            <NavItem eventKey={2} onClick={this.logoutUser}>Log out</NavItem>
+          </Nav>
         }
-        <input
-          onChange={this.doUploadFile}
-          style={{display: 'none'}}
-          type="file"
-          ref={input => this.inputElement = input}
-        />
+        </Navbar.Collapse>
       </Navbar>
     );
   }

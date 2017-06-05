@@ -14,5 +14,12 @@ export default function sendRequest(url, options) {
           })
       }
     })
-    .then(response => response.json())
+    .then(response => {
+      const type = response.headers.get("content-type");
+      if (type && type.toLowerCase().indexOf('json') > -1) {
+        return response.json();
+      } else {
+        return response;
+      }
+    })
 }

@@ -2,12 +2,13 @@ import { put, call, select } from 'redux-saga/effects';
 import {
   GET_FILES_SUCCESS,
   GET_FILES_FAIL,
-  getFiles,
   UPLOAD_FILE_SUCCESS,
   UPLOAD_FILE_FAIL,
   DELETE_FILE_SUCCESS,
   DELETE_FILE_FAIL,
-  GET_FILES
+  GET_FILES,
+  UPDATE_DESCRIPTION_FAIL,
+  UPDATE_DESCRIPTION_SUCCESS
 } from '../reducers/files';
 import sendRequest from '../utils/SendRequest';
 import { getToken } from '../utils/Storage';
@@ -33,6 +34,16 @@ function upload(token, file) {
   return sendRequest('file', options)
 }
 
+function updateDescr(token, obj) {
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify(obj),
+    headers: {
+      'X-Auth-Token': token,
+    }
+  };
+  return sendRequest(`file/${obj.id}`, options)
+}
 
 function deleteF(token, id) {
   const options = {
@@ -50,7 +61,7 @@ export function* loadFileList() {
     const result = yield call(loadList, getToken(state));
     yield put({ type: GET_FILES_SUCCESS, payload: result });
   } catch (e) {
-    yield put({ type: GET_FILES_FAIL, e });
+    yield put({ type: GET_FILES_FAIL, payload: e.response });
   }
 }
 
@@ -62,7 +73,7 @@ export function* uploadFile(action) {
     yield put({ type: UPLOAD_FILE_SUCCESS, payload: result });
     yield put({ type: GET_FILES });
   } catch (e) {
-    yield put({ type: UPLOAD_FILE_FAIL, e });
+    yield put({ type: UPLOAD_FILE_FAIL, payload: e.response });
   }
 }
 
@@ -73,10 +84,17 @@ export function* deleteFile (action) {
     yield call(deleteF, getToken(state), id);
     yield put({ type: DELETE_FILE_SUCCESS, payload: id });
   } catch (e) {
-    yield put({ type: DELETE_FILE_FAIL, e });
+    yield put({ type: DELETE_FILE_FAIL, payload: e.response });
   }
 }
 
-export function* loadFileListCall() {
-  yield put(getFiles())
+export function* updateDescription(action) {
+  try {
+    const { id, text } = action;
+    const state = yield select();
+    yield call(updateDescr, getToken(state), { id, text } );
+    yield put({ type: UPDATE_DESCRIPTION_SUCCESS, payload: { id, text }});
+  } catch (e) {
+    yield put({ type: UPDATE_DESCRIPTION_FAIL, payload: e.response });
+  }
 }

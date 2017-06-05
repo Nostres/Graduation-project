@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHighcharts from 'react-highcharts';
 
-const buildConfig = (data) => {
+const buildConfig = (data, xAxis, yAxis, title, subtitle) => {
   return {
     chart: {
       zoomType: 'x'
@@ -9,57 +9,16 @@ const buildConfig = (data) => {
     rangeSelector: {
       selected: 1
     },
-    title: {
-      text: "Chart"
-    },
-    subtitle: {
-      text: 'Diploma'
-    },
-    yAxis: {
-      title: {
-        text: 'Value'
-      }
-    },
-    xAxis: {
-      title: {
-        text: 'Date'
-      },
-      type: 'datetime'
-    },
+    title,
+    subtitle,
+    yAxis: yAxis,
+    xAxis: xAxis,
     plotOptions: {
       line: {
         enableMouseTracking: false
       }
     },
-    series: [
-      {
-        name: 'Data 1 Spline',
-        type: 'spline',
-        data: data,
-        lineWidth: 1.5,
-        marker: {
-          radius: 2
-        },
-        color: '#ff5050',
-        tooltip: {
-          valueDecimals: 2
-        }
-      },
-      // {
-      //   name: 'Data 2',
-      //   // type: 'spline',
-      //   data: data2,
-      //   color: '#0000ff',
-      //   lineWidth: 4,
-      //   marker: {
-      //     radius: 7
-      //   },
-      //   tooltip: {
-      //     valueDecimals: 2
-      //   }
-      // }
-
-    ]
+    series: data
   }
 };
 
@@ -67,9 +26,11 @@ const buildConfig = (data) => {
 
 export default class Chart extends React.Component {
   render() {
-    const { data } = this.props;
+    const { series, xAxis, yAxis, title, subtitle } = this.props;
     return (
-      <ReactHighcharts config={buildConfig(data)} ref="chart"/>
+      <div>
+        <ReactHighcharts config={buildConfig(series, xAxis, yAxis, title, subtitle)} ref="chart"/>
+      </div>
     )
   }
 }

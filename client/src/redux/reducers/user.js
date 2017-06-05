@@ -42,7 +42,7 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 
-export function login(username, password) {
+export function loginAC(username, password) {
   return {
     type: LOGIN_USER,
     username,
@@ -51,19 +51,21 @@ export function login(username, password) {
 }
 
 
-export function logout() {
+export function logoutAC() {
   return {
     type: LOGOUT_USER
   }
 }
 
-export function register(username, password) {
+
+export function registerAC(username, password) {
   return {
     type: REGISTER_USER,
     username,
     password
   }
 }
+
 
 export function isUserLoggedIn(globalState) {
   return globalState.user.get('loggedIn');

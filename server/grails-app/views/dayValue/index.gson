@@ -9,7 +9,8 @@ json {
     [
       id:     it.id,
       date:   it.date.time,
-      value:  it.value
+      value:  it.value,
+      degree:  it.degree,
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { select, call } from 'redux-saga/effects';
+import { select } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 
 export function* redirectToFiles() {
@@ -6,7 +6,7 @@ export function* redirectToFiles() {
   const { routing } = state;
   let path = routing.locationBeforeTransitions.pathname;
   if (path !== '/files') {
-    yield call(browserHistory.push, '/files');
+    browserHistory.push('/files');
   }
 }
 
@@ -15,6 +15,6 @@ export function* redirectToLogin() {
   const { routing } = state;
   let path = routing.locationBeforeTransitions.pathname;
   if(path !== '/login') {
-    yield call(browserHistory.push, '/login');
+    browserHistory.push('/login');
   }
 }

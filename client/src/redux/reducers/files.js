@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { LOGOUT_USER_SUCCESS } from './user';
 
 export const GET_FILES = 'files/GET_FILES';
 export const GET_FILES_SUCCESS = 'files/GET_FILES_SUCCESS';
@@ -12,7 +13,9 @@ export const DELETE_FILE = 'files/DELETE_FILE';
 export const DELETE_FILE_SUCCESS = 'files/DELETE_FILE_SUCCESS';
 export const DELETE_FILE_FAIL = 'files/DELETE_FILE_FAIL';
 
-export const CLEAR_ALL = 'files/CLEAR_ALL';
+export const UPDATE_DESCRIPTION = 'files/UPDATE_DESCRIPTION';
+export const UPDATE_DESCRIPTION_SUCCESS = 'files/UPDATE_DESCRIPTION_SUCCESS';
+export const UPDATE_DESCRIPTION_FAIL = 'files/UPDATE_DESCRIPTION_FAIL';
 
 const initialState = fromJS({
   data: [],
@@ -44,25 +47,36 @@ export default function reducer(state = initialState, action = {}) {
       }
       return state;
     }
+    case UPDATE_DESCRIPTION_SUCCESS: {
+      const indexToUpdate = state.get('data').findIndex(i => i.get('id') === action.payload.id);
+      if (indexToUpdate > -1) {
+        return state.setIn(['data', `${indexToUpdate}`, 'description'], action.payload.text);
+      }
+      return state;
+    }
     case DELETE_FILE_FAIL:
       return state.delete('deleting');
-    case CLEAR_ALL:
+    case LOGOUT_USER_SUCCESS:
       return initialState;
     default:
       return state;
   }
 }
 
-export function getFiles() {
+export function getFilesAC() {
   return { type: GET_FILES }
 }
 
-export function uploadFile(file) {
+export function uploadFileAC(file) {
   return { type: UPLOAD_FILE, file }
 }
 
-export function deleteFile(id) {
+export function deleteFileAC(id) {
   return { type: DELETE_FILE, id}
+}
+
+export function updateDescription(id, text) {
+  return { type: UPDATE_DESCRIPTION, id, text }
 }
 
 export function isFilesLoaded(storage) {

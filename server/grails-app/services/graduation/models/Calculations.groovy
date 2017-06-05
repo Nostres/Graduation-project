@@ -1,10 +1,12 @@
 package graduation.models
 
+import graduation.DayValue
 import grails.validation.Validateable
 
 class Calculations implements Serializable, Validateable {
 
     private Long fileId
+    private List<DayValue> sample
     private List<String> demands
     private List<String> goalList
     private Conversion conversion
@@ -15,6 +17,14 @@ class Calculations implements Serializable, Validateable {
 
     void setFileId(Long fileId) {
         this.fileId = fileId
+    }
+
+    List<DayValue> getSample() {
+        return sample
+    }
+
+    void setSample(List<DayValue> sample) {
+        this.sample = sample
     }
 
     List<String> getDemands() {
@@ -31,14 +41,6 @@ class Calculations implements Serializable, Validateable {
 
     void setGoalList(List<String> goalList) {
         this.goalList = goalList
-    }
-
-    Boolean getIsCollateral() {
-        return isCollateral
-    }
-
-    void setIsCollateral(Boolean isCollateral) {
-        this.isCollateral = isCollateral
     }
 
     Conversion getConversion() {

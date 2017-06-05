@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Alert } from 'react-bootstrap';
-import { closeModal } from '../../redux/reducers/message';
+import { closeModalAC } from '../../redux/reducers/message';
 
 const messages = {
   'danger': 'Error!',
@@ -19,7 +19,7 @@ export default class Message extends React.Component {
   }
 
   closeMessage() {
-    this.props.dispatchAction(closeModal());
+    this.props.dispatchAction(closeModalAC());
   }
 
 

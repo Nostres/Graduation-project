@@ -1,18 +1,35 @@
 .filelist-table {
-    margin: 20px;
+    margin: 64px 5px 5px 5px;
     padding: 20px;
+    border: 1px solid #BBBBBB;
+    border-radius: 7px;
+    height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.remove-button {
+.filelist-table-menu {
+    width: 100%;
+    display: flex;
+}
+
+.filelist-table-menu > h1 {
+    float: left;
+    width: calc(100% - 300px);
+}
+
+.filelist-table-menu > .btn-group {
+    width: 300px;
+    float: right;
+    padding-top: 24px;
+}
+
+.as-button {
     float: right;
     cursor: pointer;
+    margin: 2px;
 }
 
-.remove-button:hover {
-    filter:drop-shadow(0px 0px 3px red);
-}
-
-.remove-button > img {
-    height: 16px;
-    width: 16px;
+.as-button:hover {
+    filter: drop-shadow(0px 0px 5px #0000ff);
 }

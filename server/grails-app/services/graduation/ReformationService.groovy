@@ -21,7 +21,7 @@ class ReformationService {
     }
 
     private reformatAsOffSeason = { Map data, List sample ->
-        Integer d = data.get('d') as Integer
+        Integer d = data.get('D') as Integer
         return reformatList(d, sample)
     }
 

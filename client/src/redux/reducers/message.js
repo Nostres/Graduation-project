@@ -6,6 +6,7 @@ import {
   REGISTER_USER_SUCCESS
 } from './user';
 import { UPLOAD_FILE_FAIL, GET_FILES_FAIL, UPLOAD_FILE_SUCCESS } from './files';
+import { CALCULATE_FAIL, LOAD_CHART_DATA_FAIL } from './charts';
 
 const CLOSE_MESSAGE = 'message/CLOSE_MESSAGE';
 const SHOW_MESSAGE = 'message/SHOW_MESSAGE';
@@ -20,16 +21,19 @@ export default function reducer(state = initialState, action = {}) {
     case REGISTER_USER_FAIL:
     case LOGIN_USER_FAIL:
     case GET_FILES_FAIL:
-    case LOGOUT_USER_FAIL: {
+    case LOGOUT_USER_FAIL:
+    case CALCULATE_FAIL:
+    case LOAD_CHART_DATA_FAIL:
+    {
       try {
         return state
-          .set('message', action.message)
-          .set('error', action.error)
+          .set('message', action.payload.message)
+          .set('error', action.payload.error)
           .set('type', 'danger')
           .set('show', true);
       } catch (e){
         return state
-          .set('message', 'Error occurs')
+          .set('message', 'Oooops!  ¯\\_(ツ)_/¯')
           .set('type', 'danger')
           .set('show', true);
       }
@@ -56,13 +60,13 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function closeModal() {
+export function closeModalAC() {
   return {
     type: CLOSE_MESSAGE
   }
 }
 
-export function showMessage(text, style) {
+export function showMessageAC(text, style) {
   return {
     type: SHOW_MESSAGE,
     text, style
