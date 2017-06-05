@@ -19,7 +19,7 @@ function* fetchDataByPath(state, path) {
         yield put(loadChartData(param));
         yield take(LOAD_CHART_SUCCESS);
       }
-      yield put(calculateAC([], null));
+      yield put(calculateAC(['acf', 'pacf'], null));
     }
   }
 }

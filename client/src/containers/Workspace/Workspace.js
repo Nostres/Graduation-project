@@ -39,8 +39,8 @@ class Workspace extends React.Component {
         const asymmetry1 = coeffs1 ? Math.abs(coeffs1.get('asymmetry')) : 0;
 
         if (chart) {
-            const values = chart.map(function(it){return [new Date(it.get('date')), it.get('value')]}).toJSON();
-            const degrees = chart.map(function(it){return [new Date(it.get('date')), it.get('degree')]}).toJSON();
+            const values = chart.map(function(it){return [new Date(it.get('date')).getTime(), it.get('value')]}).toJSON();
+            const degrees = chart.map(function(it){return [new Date(it.get('date')).getTime(), it.get('degree')]}).toJSON();
             series.push(buildSeria('Result', 'spline', values, '#000000'));
             series1.push(buildSeria('Result', 'spline', degrees, '#b80300'));
         }

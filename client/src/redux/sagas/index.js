@@ -3,11 +3,11 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 
 import { LOGIN_USER, LOGOUT_USER, LOGIN_USER_SUCCESS, REGISTER_USER, LOGOUT_USER_SUCCESS } from '../reducers/user';
 import { GET_FILES, UPLOAD_FILE, DELETE_FILE, UPDATE_DESCRIPTION } from '../reducers/files';
-import { LOAD_CHART_DATA, CALCULATE } from '../reducers/charts';
+import { LOAD_CHART_DATA, CALCULATE, CALCULATE_ARIMA } from '../reducers/charts';
 import { redirectToFiles, redirectToLogin } from './route';
 import { login, register, logout } from './user';
 import { uploadFile, loadFileList, deleteFile, updateDescription } from './files';
-import { loadChart, calculate } from './charts';
+import { loadChart, calculate, calculateArima } from './charts';
 import { navigationResolver } from './loadData';
 
 export default function* rootSaga() {
@@ -21,6 +21,7 @@ export default function* rootSaga() {
 
     takeLatest(LOAD_CHART_DATA, loadChart),
     takeLatest(CALCULATE, calculate),
+    takeLatest(CALCULATE_ARIMA, calculateArima),
 
     takeLatest(GET_FILES, loadFileList),
     takeEvery(DELETE_FILE, deleteFile),

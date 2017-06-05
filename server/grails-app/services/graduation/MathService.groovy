@@ -23,6 +23,27 @@ class MathService {
         return data
     }
 
+
+    @Transactional(readOnly = true)
+    List<DayValue> calculateArima(Long fileId, Map<String, Integer> params) {
+        List<DayValue> dataByFile = DayValue.findAllByFile(fileService.getFile(fileId))
+        Map<String, ?> body = [
+                params: params,
+                valueList: dataByFile*.getValue().subList(0,729),
+                degreeList: dataByFile*.getDegree().subList(0,729)
+        ]
+        def forecast = PythonRunService.sendToMathServer(body, 'arma')
+        List<DayValue> response = []
+        dataByFile.eachWithIndex{ DayValue entry, int i ->
+            if (i > 364 && i < 728) {
+                entry.valueForecast = forecast.get('valueForecast').get(i - 364) as Double
+                entry.degreeForecast = forecast.get('degreeForecast').get(i - 364) as Double
+            }
+            response.add(entry)
+        }
+        return dataByFile
+    }
+
     @Transactional(readOnly = true)
     Map<String, ?> calculate(Calculations calculations) {
         List<DayValue> dataByFile = DayValue.findAllByFile(fileService.getFile(calculations.getFileId()))
