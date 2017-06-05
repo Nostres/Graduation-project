@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from '../../components/Chart/Chart';
 import Controls from '../../components/Controls/Controls';
+import { fromJS } from 'immutable'
 import { connect } from 'react-redux';
 
 import CoeffTable from './CoeffTable';
@@ -24,60 +25,70 @@ function buildSeria(name, type, data, color) {
   }
 }
 
+function generateSeries(chart, type, resultColor, forecastColor) {
+    const series = [];
+    let result = [];
+    let resultForecast = [];
+    chart.toJSON().forEach( function(it) {
+        result.push([new Date(it.date).getTime(), it[type]]);
+        if (it[`${type}Forecast`]) {
+            resultForecast.push([new Date(it.date).getTime(), it[`${type}Forecast`]]);
+        }
+    });
+    series.push(buildSeria('sample', 'spline', result, resultColor));
+    series.push(buildSeria('forecast', 'spline', resultForecast, forecastColor));
+    return series
+}
+
 
 class Workspace extends React.Component {
 
     render() {
+
         if (!this.props.isLoaded) {
             return null;
         }
 
-        const {chart, coeffs, demandsACF, demandsPACF, coeffs1, demandsACF1, demandsPACF1} = this.props;
-        const series = [];
-        const series1 = [];
-        const asymmetry = coeffs ? Math.abs(coeffs.get('asymmetry')) : 0;
-        const asymmetry1 = coeffs1 ? Math.abs(coeffs1.get('asymmetry')) : 0;
+        const {chart, coeffsValue, ACFValue, PACFValue, coeffsDegree, ACFDegree, PACFDegree} = this.props;
 
-        if (chart) {
-            const values = chart.map(function(it){return [new Date(it.get('date')).getTime(), it.get('value')]}).toJSON();
-            const degrees = chart.map(function(it){return [new Date(it.get('date')).getTime(), it.get('degree')]}).toJSON();
-            series.push(buildSeria('Result', 'spline', values, '#000000'));
-            series1.push(buildSeria('Result', 'spline', degrees, '#b80300'));
-        }
+        const seriesValue = chart ? generateSeries(chart, 'value', '#000000', '#0008B8'): [];
+        const seriesDegree = chart ? generateSeries(chart, 'degree', '#FF0028', '#0008B8') : [];
+        const asymmetry = coeffsValue ? Math.abs(coeffsValue.get('asymmetry')) : 0;
+        const asymmetry1 = coeffsDegree ? Math.abs(coeffsDegree.get('asymmetry')) : 0;
 
         return (
             <div className="workspace" id="workspace">
               <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
                 <div className="main-chart-holder">
                   <Chart
-                      series={series}
+                      series={seriesValue}
                       yAxis={{title: {text: 'Value'}}}
                       xAxis={{title: {text: 'Date'}, type: 'datetime'}}
                       title={{text: 'Day values'}}
                   />
                 </div>
-                <CoeffTable data={coeffs}/>
+                <CoeffTable data={coeffsValue}/>
               </div>
 
               <div className="main-chart-panel" style={{display: 'flex', overflow: 'hidden'}}>
                 <div className="main-chart-holder">
                   <Chart
-                      series={series1}
+                      series={seriesDegree}
                       yAxis={{title: {text: 'Value'}}}
                       xAxis={{title: {text: 'Date'}, type: 'datetime'}}
                       title={{text: 'Degree values'}}
                   />
                 </div>
-                <CoeffTable data={coeffs1}/>
+                <CoeffTable data={coeffsDegree}/>
               </div>
 
-                { (demandsACF || demandsPACF ) &&
+                { (ACFValue || PACFValue ) &&
                 <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
                     {
-                        demandsACF &&
+                        ACFValue &&
                         <div className="acf-pacf-chart-panel">
                           <Chart
-                              series={[buildSeria('Result', 'spline', demandsACF.toJS(), '#00aadd')]}
+                              series={[buildSeria('Result', 'spline', ACFValue.toJS(), '#00aadd')]}
                               title={{text: 'Autocorrelation'}}
                               yAxis={{
                                   plotBands: [{
@@ -95,10 +106,10 @@ class Workspace extends React.Component {
                         </div>
                     }
                     {
-                        demandsPACF &&
+                        PACFValue &&
                         <div className="acf-pacf-chart-panel">
                           <Chart
-                              series={[buildSeria('Result', 'column', demandsPACF.toJS(), '#0000ff')]}
+                              series={[buildSeria('Result', 'column', PACFValue.toJS(), '#0000ff')]}
                               title={{text: 'Partial autocorrelation'}}
                               yAxis={{
                                   plotBands: [{
@@ -118,13 +129,13 @@ class Workspace extends React.Component {
                 </div>
                 }
 
-                { (demandsACF1 || demandsPACF1 ) &&
+                { (ACFDegree || PACFDegree ) &&
                 <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
                     {
-                        demandsACF1 &&
+                        ACFDegree &&
                         <div className="acf-pacf-chart-panel">
                           <Chart
-                              series={[buildSeria('Result', 'spline', demandsACF1.toJS(), '#00aadd')]}
+                              series={[buildSeria('Result', 'spline', ACFDegree.toJS(), '#00aadd')]}
                               title={{text: 'Autocorrelation for Deegre'}}
                               yAxis={{
                                   plotBands: [{
@@ -142,10 +153,10 @@ class Workspace extends React.Component {
                         </div>
                     }
                     {
-                        demandsPACF1 &&
+                        PACFDegree &&
                         <div className="acf-pacf-chart-panel">
                           <Chart
-                              series={[buildSeria('Result', 'column', demandsPACF1.toJS(), '#0000ff')]}
+                              series={[buildSeria('Result', 'column', PACFDegree.toJS(), '#0000ff')]}
                               title={{text: 'Partial autocorrelation for Deegre'}}
                               yAxis={{
                                   plotBands: [{
@@ -177,12 +188,12 @@ const mapStateToProps = (state) => {
     active: state.charts.get('active'),
     chart: state.charts.getIn(['data', `${state.charts.get('active')}`]),
     isLoaded: state.charts.get('isLoaded'),
-    demandsACF: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'acf']),
-    demandsACF1: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'demands', 'acf']),
-    demandsPACF: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'pacf']),
-    demandsPACF1: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'demands', 'pacf']),
-    coeffs: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'coefficients']),
-    coeffs1: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'coefficients'])
+    ACFValue: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'acf']),
+    ACFDegree: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'demands', 'acf']),
+    PACFValue: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'demands', 'pacf']),
+    PACFDegree: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'demands', 'pacf']),
+    coeffsValue: state.charts.getIn(['valueList', `${state.charts.get('active')}`, 'coefficients']),
+    coeffsDegree: state.charts.getIn(['degreeList', `${state.charts.get('active')}`, 'coefficients'])
   }
 };
 

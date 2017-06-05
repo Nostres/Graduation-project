@@ -10,7 +10,6 @@ import './controls.css'
 const demands = [
     {value: 'acf', label: 'Autocorrelation function'},
     {value: 'pacf', label: 'Partial autocorrelation function'},
-    {value: 'ccf', label: 'Cross-correlation function'},
     {value: 'arma', label: 'Autoregressive–moving-average model'},
 ];
 

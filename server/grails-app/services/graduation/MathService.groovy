@@ -7,6 +7,8 @@ import grails.transaction.Transactional
 @Transactional
 class MathService {
 
+    private static final Integer Lag = 365
+
     def reformationService
     def coefficientService
     def fileService
@@ -14,7 +16,7 @@ class MathService {
     @Transactional(readOnly = true)
     List<DayValue> transformsSample(List<DayValue> date, Map<String, ?> response) {
         List<DayValue> data = []
-        response.get('Value').get('sample').eachWithIndex{ el, idx ->
+        response.get('Value').get('sample').eachWithIndex { el, idx ->
             DayValue dayValue = date.get(idx)
             dayValue.setValue(el as Double)
             dayValue.setDegree(response.get('Degree').get('sample').get(idx) as Double)
@@ -25,23 +27,29 @@ class MathService {
 
 
     @Transactional(readOnly = true)
-    List<DayValue> calculateArima(Long fileId, Map<String, Integer> params) {
+    Map<String, ?> calculateArima(Long fileId, Map<String, Integer> params) {
         List<DayValue> dataByFile = DayValue.findAllByFile(fileService.getFile(fileId))
+        Integer size = dataByFile.size()
         Map<String, ?> body = [
-                params: params,
-                valueList: dataByFile*.getValue().subList(0,729),
-                degreeList: dataByFile*.getDegree().subList(0,729)
+                params    : params,
+                valueList : dataByFile*.getValue().subList(Lag, size),
+                degreeList: dataByFile*.getDegree().subList(Lag, size)
         ]
         def forecast = PythonRunService.sendToMathServer(body, 'arma')
         List<DayValue> response = []
-        dataByFile.eachWithIndex{ DayValue entry, int i ->
-            if (i > 364 && i < 728) {
-                entry.valueForecast = forecast.get('valueForecast').get(i - 364) as Double
-                entry.degreeForecast = forecast.get('degreeForecast').get(i - 364) as Double
+        List<Double> valueForecast = forecast.get('valueForecast') as List<Double>
+        List<Double> deegreForecast = forecast.get('degreeForecast') as List<Double>
+        dataByFile.eachWithIndex { DayValue entry, int i ->
+            if (i > Lag && i < (Lag + valueForecast.size())) {
+                entry.valueForecast = valueForecast.get(i - Lag)
+                entry.degreeForecast = deegreForecast.get(i - Lag)
             }
             response.add(entry)
         }
-        return dataByFile
+        return [
+                fileId: fileId,
+                data  : response
+        ]
     }
 
     @Transactional(readOnly = true)
@@ -55,8 +63,8 @@ class MathService {
             response.put(type, calculationFlow(calculations, data*."get${type}"()))
         })
         return [
-                data: transformsSample(data, response),
-                valueList: response.get('Value'),
+                data      : transformsSample(data, response),
+                valueList : response.get('Value'),
                 degreeList: response.get('Degree'),
         ]
     }
