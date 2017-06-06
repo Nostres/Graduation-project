@@ -1,7 +1,6 @@
 import React from 'react';
 import Chart from '../../components/Chart/Chart';
 import Controls from '../../components/Controls/Controls';
-import {fromJS} from 'immutable'
 import {connect} from 'react-redux';
 
 import CoeffTable from './CoeffTable';
