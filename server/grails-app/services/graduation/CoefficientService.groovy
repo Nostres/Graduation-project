@@ -14,7 +14,6 @@ class CoefficientService {
         Double deviation = countDeviation(variance).round(NUMBER_AFTER_DOT)
         Double asymmetry = countAsymmetry(sample, averageValue, deviation).round(NUMBER_AFTER_DOT)
         Double excess = countExcess(sample, averageValue, deviation).round(NUMBER_AFTER_DOT)
-
         return [
                 size        : sample.size(),
                 averageValue: averageValue,
@@ -22,7 +21,7 @@ class CoefficientService {
                 deviation   : deviation,
                 asymmetry   : asymmetry,
                 excess      : excess
-        ]
+        ] as Map<String, Double>
     }
 
     Double countAverageValue(List<Double> sample) {

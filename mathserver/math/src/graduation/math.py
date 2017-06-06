@@ -7,6 +7,38 @@ from flask import Flask, json, Response, request
 app = Flask(__name__)
 
 
+def cov(arg1, arg2):
+    if len(arg1) != len(arg2):
+        print('Error: Lengths of variables to be correlated must be equal')
+
+    mean_x = np.mean(arg1)
+    mean_y = np.mean(arg2)
+
+    mu = []
+    n = 0
+    for _ in arg1:
+        var_a = arg1[n] - mean_x
+        mu.append(var_a)
+        n = n + 1
+
+    nu = []
+    n = 0
+    for _ in arg2:
+        var_b = arg2[n] - mean_y
+        nu.append(var_b)
+        n = n + 1
+
+    n = 0
+    lst = []
+    for _ in nu:
+        var4 = nu[n] * mu[n]
+        lst.append(var4)
+        n = n + 1
+    var5 = sum(lst)
+    result = var5 / ((len(arg1)) - 1)
+    return result
+
+
 def calc_acf(data):
     sample = pd.Series(map(float, data))
     acfResult = acf(sample, fft=False, nlags=50)
@@ -23,6 +55,11 @@ def calc_ccf(data):
     sample1 = pd.Series(map(float, data[0]))
     sample2 = pd.Series(map(float, data[1]))
     return np.correlate(sample1, sample2, 'full')
+
+
+def calc_cov(data):
+    sample = pd.Series(map(float, data))
+    return cov(sample, sample)
 
 
 def arma(sample, ar, ma):
@@ -45,7 +82,10 @@ def calc_arma(body):
 
 
 def formulas(formula, body):
-    return globals()["calc_" + formula](body)
+    if formula == 'countArima':
+        return arma(body.get('noise'), body.get('ar'), body.get('ma'))
+    else:
+        return globals()["calc_" + formula](body)
 
 
 @app.route("/calc/<formula>", methods=['POST'])

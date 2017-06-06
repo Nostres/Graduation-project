@@ -47,9 +47,13 @@ export default function reducer(state = initialState, action = {}) {
         case CALCULATE_ARIMA:
             return state.set('calculating', true);
         case CALCULATE_ARIMA_SUCCESS:
-            return state.setIn(['data', `${action.payload.result.fileId}`], fromJS(action.payload.result.data));
+            return state
+                .setIn(['data', `${action.payload.result.fileId}`], fromJS(action.payload.result.data))
+                .setIn(['noiseData'], fromJS(action.payload.result.noiseData))
+                .delete('valueList')
+                .delete('degreeList');
         case CALCULATE_ARIMA_FAIL:
-            return state;
+            return state.delete('calculating');
         case LOGOUT_USER_SUCCESS:
             return initialState;
         default:

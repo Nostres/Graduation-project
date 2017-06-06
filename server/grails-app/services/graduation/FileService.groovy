@@ -30,8 +30,8 @@ class FileService {
     }
 
     def addDataFromStream(User user, HttpServletRequest request) throws ServiceException {
-        checkUser(user)
-        checkFileType(request)
+        assert checkUser(user)
+        assert checkFileType(request)
 
         String fileName = request.getHeader('name')
         String description = request.getHeader('description')

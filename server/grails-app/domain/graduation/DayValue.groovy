@@ -7,6 +7,7 @@ class DayValue {
     Double degree
     Double valueForecast
     Double degreeForecast
+    Double noiseForecast
 
     static belongsTo = [file: DataFile]
 
@@ -16,6 +17,7 @@ class DayValue {
         value nullable: false
         valueForecast nullable: true
         degreeForecast nullable: true
+        noiseForecast nullable: true
         file nullable: false
     }
 }
