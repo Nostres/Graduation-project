@@ -55,7 +55,7 @@ class Workspace extends React.Component {
         const seriesDegree = chart ? generateSeries(chart, 'degree', '#FF0028', '#0008B8') : [];
         const signal = noise ? buildSeria('signal', 'column', noise.get('signal').toJS(), '#00aadd') : [];
         const noiseSample = noise ? buildSeria('noise', 'spline', noise.get('noise').toJS(), '#00aadd') : [];
-        const forecast = noise ? generateSeries(chart, 'noise', '#FF0028', '#0008B8') : [];
+        const forecast = noise ? generateSeries(chart, 'noise', '#00B80D', '#B800B5') : [];
         const asymmetry = coeffsValue ? Math.abs(coeffsValue.get('asymmetry')) : 0;
         const asymmetry1 = coeffsDegree ? Math.abs(coeffsDegree.get('asymmetry')) : 0;
 
