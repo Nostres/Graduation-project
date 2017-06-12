@@ -25,7 +25,7 @@ class CoefficientService {
     }
 
     Double countAverageValue(List<Double> sample) {
-        return sample.inject(0) { result, x -> result + x } / sample.size()
+        return (sample.inject(0) { result, x -> result + x }) / sample.size()
     }
 
     Double countVariance(List<Double> sample, Double averageValue) {

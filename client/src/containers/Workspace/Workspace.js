@@ -55,6 +55,8 @@ class Workspace extends React.Component {
         const seriesDegree = chart ? generateSeries(chart, 'degree', '#FF0028', '#0008B8') : [];
         const signal = noise ? buildSeria('signal', 'column', noise.get('signal').toJS(), '#00aadd') : [];
         const noiseSample = noise ? buildSeria('noise', 'spline', noise.get('noise').toJS(), '#00aadd') : [];
+        const noiseacf = noise ? buildSeria('noiseacf', 'column', noise.get('acfNoise').toJS(), '#c70800') : [];
+        const noispacf = noise ? buildSeria('noisepacf', 'column', noise.get('pacfNoise').toJS(), '#00aadd') : [];
         const forecast = noise ? generateSeries(chart, 'noise', '#00B80D', '#B800B5') : [];
         const asymmetry = coeffsValue ? Math.abs(coeffsValue.get('asymmetry')) : 0;
         const asymmetry1 = coeffsDegree ? Math.abs(coeffsDegree.get('asymmetry')) : 0;
@@ -106,13 +108,29 @@ class Workspace extends React.Component {
                     </div>
                 </div>
                 }
+                { (noise) && (
+                <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
+                   <div className="acf-pacf-chart-panel">
+                            <Chart
+                                series={[noiseacf]}
+                                title={{text: 'Autocorrelation'}}
+                            />
+                        </div>
+                        <div className="acf-pacf-chart-panel">
+                            <Chart
+                                series={[noispacf]}
+                                title={{text: 'Partial autocorrelation'}}
+                            />
+                        </div>
+                </div>)
+                }
                 { (ACFValue || PACFValue ) &&
                 <div className="main-chart-panel" style={{display: 'flex', align: 'center'}}>
                     {
                         ACFValue &&
                         <div className="acf-pacf-chart-panel">
                             <Chart
-                                series={[buildSeria('Result', 'spline', ACFValue.toJS(), '#00aadd')]}
+                                series={[buildSeria('Result', 'column', ACFValue.toJS(), '#00aadd')]}
                                 title={{text: 'Autocorrelation'}}
                                 yAxis={{
                                     plotBands: [{
@@ -159,7 +177,7 @@ class Workspace extends React.Component {
                         ACFDegree &&
                         <div className="acf-pacf-chart-panel">
                             <Chart
-                                series={[buildSeria('Result', 'spline', ACFDegree.toJS(), '#00aadd')]}
+                                series={[buildSeria('Result', 'column', ACFDegree.toJS(), '#00aadd')]}
                                 title={{text: 'Autocorrelation for Deegre'}}
                                 yAxis={{
                                     plotBands: [{

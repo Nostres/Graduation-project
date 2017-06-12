@@ -7,6 +7,8 @@ class MathController {
 
     static responseFormats = ['json', 'xml']
 
+
+
     def mathService
 
     @Secured(value = ['ROLE_USER', 'ROLE_ADMIN'])
@@ -18,7 +20,8 @@ class MathController {
     def calculateArima() {
         def json = request.JSON
         Long fileId = json.get('fileId') as Long
-        Map<String, Integer> params = json.get('params') as Map<String, Integer>
-        respond mathService.calculateArima(fileId, params)
+        List<Double> valueList = json.get('valueList') as List<Double>
+        List<Double> degreeList = json.get('degreeList') as List<Double>
+        respond mathService.calculateArima(fileId, valueList, degreeList)
     }
 }

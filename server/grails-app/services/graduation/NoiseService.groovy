@@ -9,8 +9,6 @@ class NoiseService {
     def correlationService
 
     def countNoiseFunction(List<Double> valueForecast, List<Double> degreeForecast, List<DayValue> sample) {
-        List<DayValue> center = sample.subList(MathService.Lag, MathService.Lag + 365)
-        List<DayValue> left = sample.subList(MathService.Lag, sample.size())
         List<Double> covValue = correlationService.autoCovariance(valueForecast, valueForecast)
         List<Double> covDegree = correlationService.autoCovariance(degreeForecast, degreeForecast)
         List<Double> covValueDegree = correlationService.autoCovariance(valueForecast, degreeForecast)
@@ -18,33 +16,32 @@ class NoiseService {
         Double sDegree = Math.sqrt(Math.abs(covDegree.get(0)))
         List<Double> crossCorrelation = correlationService.countCrossCorrelation(covValueDegree, sValue, sDegree)
         List<Double> signalList = countSignalFunction(crossCorrelation, sValue, sDegree)
-        List<Double> noiseList = countNoise(center, signalList)
-//        List<Double> acfNoise = pythonRunService.sendToMathServer(noiseList, 'acf') as List<Double>
-//        List<Double> pacfNoise = pythonRunService.sendToMathServer(noiseList, 'pacf') as List<Double>
+        List<Double> noiseList = countNoise(valueForecast, degreeForecast, signalList)
+        List<Double> acfNoise = pythonRunService.sendToMathServer(noiseList, 'acf') as List<Double>
+        List<Double> pacfNoise = pythonRunService.sendToMathServer(noiseList, 'pacf') as List<Double>
         def body = [
-                noise: left*.getValue(),
+                noise: sample*.getValue(),
                 ar   : 3,
-                ma   : 2
+                ma   : 2,
+                isR   : false
         ]
         List<Double> noiseForecast = pythonRunService.sendToMathServer(body, 'countArima') as List<Double>
-        return [[signal: signalList, noise: noiseList, acfNoise: [], pacfNoise: []], noiseForecast]
+        return [[signal: signalList, noise: noiseList, acfNoise: acfNoise, pacfNoise: pacfNoise], noiseForecast]
     }
 
     List<Double> countSignalFunction(List<Double> crossCorrelation, Double sA, Double sB) {
         List<Double> signalList = []
         crossCorrelation.each {
-            signalList.add(it * (sA / sB))
+            signalList.add(it * (sB / sA))
         }
         return signalList
     }
 
-    List<Double> countNoise(List<DayValue> sample, List<Double> crossCorelation) {
-        List<Double> degreeList = sample*.getDegree()
-        List<Double> valueList = sample*.getValue()
+    List<Double> countNoise(List<Double> valueForecast, List<Double> degreeForecast, List<Double> crossCorelation) {
         List<Double> noiseList = []
-        degreeList.eachWithIndex { it, idx ->
-            int iter = idx + 1
-            Double sum = valueList.subList(0, iter).reverse().inject(0) { result, x ->
+        degreeForecast.eachWithIndex { it, idx ->
+            int iter = ((idx + 1) < 6) ? idx + 1 : 6
+            Double sum = valueForecast.subList(0, iter).reverse().inject(0) { result, x ->
                 Double step = result + x * crossCorelation.get(idx)
                 idx--
                 return step

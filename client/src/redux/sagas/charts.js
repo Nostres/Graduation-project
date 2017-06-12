@@ -73,7 +73,7 @@ export function* calculateArima(action) {
     try {
         const state = yield select();
         const fileId = state.charts.get('active');
-        const body = { params: action.params, fileId: fileId };
+        const body = { params: action.params, fileId: fileId, valueList: action.valueList,  degreeList: action.degreeList };
         const result = yield call(sendCalc, getToken(state), body, `math/calculateArima`);
         yield put({type: CALCULATE_ARIMA_SUCCESS, payload: {result}});
     } catch (e) {

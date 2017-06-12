@@ -52,7 +52,15 @@ export default class Controls extends React.Component {
             MAdegree: this.MAdegree.value,
             ARdegree: this.ARdegree.value,
         };
-        this.props.dispatchAction(calculateArima(params, this.props.data))
+
+        const valueList = [];
+        const degreeList = [];
+
+        this.props.data.forEach(function(it) {
+            valueList.push(it.get('value'));
+            degreeList.push(it.get('degree'));
+        });
+        this.props.dispatchAction(calculateArima(params, valueList, degreeList))
 
     }
 

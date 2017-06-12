@@ -83,10 +83,10 @@ export function calculateAC(demands, conversionData, data) {
     }
 }
 
-export function calculateArima(params, data) {
+export function calculateArima(params, valueList, degreeList) {
     return {
         type: CALCULATE_ARIMA,
         params,
-        data
+         valueList, degreeList
     }
 }

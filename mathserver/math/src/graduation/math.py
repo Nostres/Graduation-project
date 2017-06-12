@@ -62,13 +62,14 @@ def calc_cov(data):
     return cov(sample, sample)
 
 
-def arma(sample, ar, ma):
+def arma(sample, ar, ma, isR):
     X = sample
-    size = int(365)
-    train, test = X[0:size], X[size:len(X)]
+    size = len(sample)
+    train = (X[365:size], X[378:size])[isR]
     history = [x for x in train]
     model = ARIMA(history, order=(int(ar), 0, int(ma)))
     model_fit = model.fit(disp=0)
+    print(model_fit.summary())
     predictions = model_fit.predict()
     return np.around(predictions, decimals=5).tolist()
 
@@ -76,14 +77,14 @@ def arma(sample, ar, ma):
 def calc_arma(body):
     params = body.get('params')
     return dict({
-        'valueForecast': arma(body.get('valueList'), params.get('ARvalue'), params.get('MAvalue')),
-        'degreeForecast': arma([float(i) for i in body.get('degreeList')], params.get('ARdegree'), params.get('MAdegree')),
+        'valueForecast': arma(body.get('valueList'), params.get('ARvalue'), params.get('MAvalue'), False),
+        'degreeForecast': arma([float(i) for i in body.get('degreeList')], params.get('ARdegree'), params.get('MAdegree'), False),
     })
 
 
 def formulas(formula, body):
     if formula == 'countArima':
-        return arma(body.get('noise'), body.get('ar'), body.get('ma'))
+        return arma([float(i) for i in body.get('noise')], body.get('ar'), body.get('ma'), body.get('isR'))
     else:
         return globals()["calc_" + formula](body)
 
